@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b3121f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TREASURE">
+<title>TREASURE</title>
+<style>
+:root{
+  --bg:#f6f4f2; --card:#ffffff; --ink:#17120f; --mute:#6b625c; --line:#e6e1dc;
+  --red:#b3121f; --on-red:#ffffff; --bubble-in:#ffffff; --shadow:0 1px 2px rgba(23,18,15,.06);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#121010; --card:#1c1918; --ink:#f3eeea; --mute:#a39a93; --line:#2e2927; --red:#c8202d; --bubble-in:#25211f; --shadow:none; color-scheme:dark}
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+[hidden]{display:none!important}
+
+.app{height:100dvh;max-width:720px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg);
+  padding-top:env(safe-area-inset-top,0px);border-inline:1px solid transparent}
+@media(min-width:760px){.app{border-inline-color:var(--line)}}
+.top{display:flex;align-items:center;gap:10px;padding:12px max(16px,env(safe-area-inset-left,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);background:var(--card);min-height:56px}
+.top h1{margin:0;font-size:18px;font-weight:700;flex:1;min-width:0}
+.brand{color:var(--red);letter-spacing:.22em;font-weight:800}
+.main{flex:1;overflow:auto;padding:12px max(16px,env(safe-area-inset-left,0px)) 96px;-webkit-overflow-scrolling:touch}
+.nav{display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav button{flex:1;background:none;border:0;padding:13px 0;font-size:13px;color:var(--mute)}
+.nav button.on{color:var(--red);font-weight:700;box-shadow:inset 0 2px 0 var(--red)}
+
+.row{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
+button.row:active{background:var(--bg)}
+.g{flex:1;min-width:0}
+.tr{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b{font-weight:600}
+.m{color:var(--mute);font-size:13px}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}
+.av{width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:700;flex:none}
+.badge{background:var(--red);color:var(--on-red);border-radius:99px;font-size:11px;font-weight:700;padding:1px 7px;min-width:20px;text-align:center}
+
+.btn{background:var(--red);color:var(--on-red);border:0;border-radius:10px;padding:10px 16px;font-weight:600}
+.btn.o{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.s{padding:6px 12px;font-size:13px}
+.btn:disabled{opacity:.55}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 13px;margin:0 6px 8px 0;font-size:13px}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip.ic{padding:6px 10px}
+input,select,textarea{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+label.f{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
+.form{display:grid;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:14px}
+.form .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.empty{color:var(--mute);text-align:center;padding:36px 12px}
+.empty b{display:block;color:var(--ink);margin-bottom:4px}
+
+.fab{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(72px + env(safe-area-inset-bottom,0px));width:54px;height:54px;border-radius:50%;border:0;background:var(--red);color:var(--on-red);font-size:28px;line-height:1;box-shadow:0 4px 14px rgba(0,0,0,.28)}
+@media(min-width:760px){.fab{right:calc(50% - 340px)}}
+
+.msgs{flex:1;overflow:auto;padding:10px max(14px,env(safe-area-inset-left,0px)) 10px;display:flex;flex-direction:column;gap:2px}
+.sep{align-self:center;color:var(--mute);font-size:12px;margin:10px 0 6px}
+.bub{max-width:80%;padding:7px 11px;border-radius:14px;background:var(--bubble-in);border:1px solid var(--line);align-self:flex-start;overflow-wrap:anywhere;white-space:pre-wrap}
+.bub.me{align-self:flex-end;background:var(--red);color:var(--on-red);border-color:var(--red)}
+.bub .who{font-size:12px;font-weight:700;color:var(--red);margin-bottom:1px}
+.bub .meta{font-size:11px;opacity:.7;margin-top:2px;display:flex;gap:8px;white-space:normal}
+.bub .meta button{background:none;border:0;padding:0;color:inherit;text-decoration:underline;font-size:11px}
+.composer{display:flex;gap:8px;padding:10px max(12px,env(safe-area-inset-left,0px)) calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--card)}
+.composer input{flex:1}
+
+.auth{min-height:100dvh;display:grid;place-items:center;padding:24px max(20px,env(safe-area-inset-left,0px));background:#17120f;color:#fff}
+.auth .box{width:100%;max-width:380px}
+.auth h1{font-size:36px;letter-spacing:.25em;margin:0 0 4px;color:#fff;font-weight:800}
+.auth .tag{letter-spacing:.2em;font-size:12px;opacity:.8;margin:0 0 22px}
+.auth input{background:#241e1b;border-color:#3a322e;color:#fff;margin-bottom:10px}
+.auth .err{color:#ffb4ab;min-height:20px;font-size:14px;margin:2px 0 8px}
+.auth .ok{color:#b8f0c8}
+.auth .btn{width:100%;padding:12px}
+.auth .link{background:none;border:0;color:#fff;text-decoration:underline;margin-top:14px;width:100%;padding:8px}
+
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--card);border-radius:16px 16px 0 0;width:100%;max-width:720px;max-height:86dvh;display:flex;flex-direction:column;padding:14px max(16px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px))}
+.sheet .list{overflow:auto;flex:1;margin:10px 0}
+.sheet .row{box-shadow:none}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#17120f;color:#fff;padding:9px 16px;border-radius:99px;z-index:50;max-width:90%;font-size:14px;text-align:center}
+.tg{width:44px;height:26px;border-radius:99px;background:var(--line);border:0;position:relative;flex:none;padding:0}
+.tg:after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}
+.tg.on{background:var(--red)}.tg.on:after{left:21px}
+h2{font-size:15px;margin:20px 0 8px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.52.0/dist/umd/supabase.js"></script>
+<script>
+"use strict";
+/* ---------- CONFIG ---------- */
+const SUPABASE_URL = "https://weggrwxuzqlqcdqssmjj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_j_gD6VhTXwaVIA7HEArdwA_Cvnp4tGo"; // publishable key: safe in the browser, data is protected by row-level security
+
+/* ---------- SETUP ---------- */
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const initial = n => (String(n || "?").trim()[0] || "?").toUpperCase();
+const S = {
+  user: null, me: null, tab: "chats",
+  convs: [], names: {}, open: null, msgs: [],
+  vault: [], vcat: "All", mems: [], channel: null, installEv: null, sheet: null
+};
+const root = $("#root");
+
+function fmt(d) {
+  const t = new Date(d), n = new Date();
+  if (t.toDateString() === n.toDateString()) return t.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+  const y = new Date(n.getTime() - 864e5);
+  if (t.toDateString() === y.toDateString()) return "Yesterday";
+  return t.toLocaleDateString([], {day: "numeric", month: "short"});
+}
+function dayLabel(d) {
+  const t = new Date(d), n = new Date();
+  if (t.toDateString() === n.toDateString()) return "Today";
+  const y = new Date(n.getTime() - 864e5);
+  if (t.toDateString() === y.toDateString()) return "Yesterday";
+  return t.toLocaleDateString([], {weekday: "long", day: "numeric", month: "long"});
+}
+let toastTimer;
+function toast(msg) {
+  document.querySelectorAll(".toast").forEach(e => e.remove());
+  const el = document.createElement("div");
+  el.className = "toast"; el.setAttribute("role", "status"); el.textContent = msg;
+  document.body.appendChild(el);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.remove(), 2600);
+}
+
+/* ---------- ICON + MANIFEST (drawn in the browser so the app is one file) ---------- */
+function makeIcon(size) {
+  const c = document.createElement("canvas"); c.width = c.height = size;
+  const g = c.getContext("2d");
+  g.fillStyle = "#b3121f"; g.fillRect(0, 0, size, size);
+  g.fillStyle = "#ffffff"; g.font = "800 " + Math.round(size * 0.62) + "px system-ui,sans-serif";
+  g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("T", size / 2, size / 2 + size * 0.03);
+  return c.toDataURL("image/png");
+}
+try {
+  const i192 = makeIcon(192), i512 = makeIcon(512);
+  const apple = document.createElement("link"); apple.rel = "apple-touch-icon"; apple.href = makeIcon(180); document.head.appendChild(apple);
+  const fav = document.createElement("link"); fav.rel = "icon"; fav.href = i192; document.head.appendChild(fav);
+  const base = location.origin + location.pathname.replace(/[^/]*$/, "");
+  const manifest = {
+    name: "TREASURE", short_name: "TREASURE", start_url: base, scope: base, display: "standalone",
+    background_color: "#17120f", theme_color: "#b3121f",
+    icons: [{src: i192, sizes: "192x192", type: "image/png", purpose: "any"}, {src: i512, sizes: "512x512", type: "image/png", purpose: "any"}]
+  };
+  const ml = document.createElement("link"); ml.rel = "manifest";
+  ml.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: "application/manifest+json"}));
+  document.head.appendChild(ml);
+} catch (e) { /* the app still works without install support */ }
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); S.installEv = e; const b = $("#installBtn"); if (b) b.hidden = false; });
+
+/* ---------- AUTH ---------- */
+function renderAuth(mode, msg, ok) {
+  mode = mode || "in";
+  root.innerHTML = `
+  <div class="auth"><form class="box" id="authForm" novalidate>
+    <h1>TREASURE</h1><p class="tag">DISCOVER. CONNECT. VALUE.</p>
+    ${mode === "up" ? `<input id="an" autocomplete="name" placeholder="Your name" aria-label="Your name">` : ""}
+    <input id="ae" type="email" autocomplete="email" placeholder="Email" aria-label="Email">
+    <input id="ap" type="password" autocomplete="${mode === "up" ? "new-password" : "current-password"}" placeholder="Password (6+ characters)" aria-label="Password">
+    <div class="err ${ok ? "ok" : ""}" id="aerr" role="alert">${esc(msg || "")}</div>
+    <button class="btn" id="abtn" type="submit">${mode === "up" ? "Create account" : "Sign in"}</button>
+    <button class="link" type="button" data-act="authmode" data-mode="${mode === "up" ? "in" : "up"}">${mode === "up" ? "I already have an account" : "New here? Create an account"}</button>
+  </form></div>`;
+  $("#authForm").addEventListener("submit", ev => { ev.preventDefault(); doAuth(mode); });
+}
+async function doAuth(mode) {
+  const email = $("#ae").value.trim(), pw = $("#ap").value, name = mode === "up" ? $("#an").value.trim() : "";
+  const err = t => { $("#aerr").className = "err"; $("#aerr").textContent = t; $("#abtn").disabled = false; };
+  if (!email || !pw) return err("Enter your email and password.");
+  if (mode === "up" && !name) return err("Enter your name so friends can find you.");
+  if (pw.length < 6) return err("Use at least 6 characters for the password.");
+  $("#abtn").disabled = true; $("#aerr").textContent = "";
+  try {
+    if (mode === "up") {
+      const {data, error} = await sb.auth.signUp({email, password: pw, options: {data: {display_name: name}}});
+      if (error) return err(error.message);
+      if (!data.session) return renderAuth("in", "Account created. Check your email to confirm it, then sign in.", true);
+      await enter(data.user);
+    } else {
+      const {data, error} = await sb.auth.signInWithPassword({email, password: pw});
+      if (error) return err(error.message);
+      await enter(data.user);
+    }
+  } catch (e) { err("Could not reach TREASURE. Check your connection and try again."); }
+}
+async function signOut() {
+  S.user = null; stopRealtime();
+  await sb.auth.signOut();
+  S.me = null; S.convs = []; S.open = null; S.vault = []; S.mems = [];
+  renderAuth("in");
+}
+sb.auth.onAuthStateChange(ev => { if (ev === "SIGNED_OUT" && S.user) { S.user = null; stopRealtime(); renderAuth("in", "You were signed out. Sign in again."); } });
+
+async function enter(user) {
+  S.user = user;
+  const {data: me, error} = await sb.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  if (error || !me) {
+    S.user = null; await sb.auth.signOut();
+    return renderAuth("in", "Your profile was not created. Run the sign-up fix query in Supabase, then register again.");
+  }
+  S.me = me;
+  const wanted = user.user_metadata && user.user_metadata.display_name;
+  if (me.display_name === "New user" && wanted) {
+    const {data} = await sb.from("profiles").update({display_name: wanted}).eq("id", user.id).select().single();
+    if (data) S.me = data;
+  }
+  S.names[user.id] = S.me.display_name;
+  S.tab = "chats"; S.open = null;
+  startRealtime();
+  render();
+  refreshConvs();
+}
+
+/* ---------- REALTIME ---------- */
+function startRealtime() {
+  stopRealtime();
+  S.channel = sb.channel("treasure-live")
+    .on("postgres_changes", {event: "INSERT", schema: "public", table: "messages"}, p => onNewMessage(p.new))
+    .on("postgres_changes", {event: "INSERT", schema: "public", table: "conversation_members"}, () => refreshConvsSoon())
+    .subscribe();
+}
+function stopRealtime() { if (S.channel) { sb.removeChannel(S.channel); S.channel = null; } }
+let rcTimer;
+function refreshConvsSoon() { clearTimeout(rcTimer); rcTimer = setTimeout(refreshConvs, 250); }
+function onNewMessage(m) {
+  if (S.open && m.conversation_id === S.open.id) {
+    addMsg(m);
+    if (m.sender_id !== S.user.id) markRead(m.conversation_id);
+  }
+  refreshConvsSoon();
+}
+
+/* ---------- CONVERSATIONS ---------- */
+async function refreshConvs() {
+  if (!S.user) return;
+  const {data: mem, error} = await sb.from("conversation_members")
+    .select("conversation_id,last_read_at,conversations(id,is_group,title,created_at)").eq("user_id", S.user.id);
+  if (error) { toast(error.message); return; }
+  const ids = mem.map(m => m.conversation_id);
+  if (!ids.length) { S.convs = []; paintConvs(); return; }
+  const [a, b, c] = await Promise.all([
+    sb.from("conversation_members").select("conversation_id,user_id,profiles(display_name)").in("conversation_id", ids),
+    sb.from("messages").select("id,conversation_id,sender_id,body,media_type,created_at,deleted_at").in("conversation_id", ids).order("created_at", {ascending: false}).limit(300),
+    sb.rpc("unread_counts")
+  ]);
+  const members = a.data || [], msgs = b.data || [], unread = {};
+  (c.data || []).forEach(r => { unread[r.conversation_id] = Number(r.unread) || 0; });
+  members.forEach(r => { if (r.profiles) S.names[r.user_id] = r.profiles.display_name; });
+  const lastBy = {};
+  msgs.forEach(m => { if (!lastBy[m.conversation_id]) lastBy[m.conversation_id] = m; });
+  S.convs = mem.map(m => {
+    const cv = m.conversations || {};
+    const others = members.filter(x => x.conversation_id === cv.id && x.user_id !== S.user.id);
+    const title = cv.is_group ? (cv.title || "Group") : ((others[0] && S.names[others[0].user_id]) || "Chat");
+    const last = lastBy[cv.id];
+    let preview = "No messages yet";
+    if (last) {
+      const who = last.sender_id === S.user.id ? "You: " : (cv.is_group ? (S.names[last.sender_id] || "Someone") + ": " : "");
+      preview = last.deleted_at ? "Message deleted" : who + (last.body || ("[" + (last.media_type || "attachment") + "]"));
+    }
+    return {id: cv.id, is_group: cv.is_group, title, preview, time: last ? last.created_at : cv.created_at, unread: unread[cv.id] || 0};
+  }).sort((x, y) => new Date(y.time) - new Date(x.time));
+  if (S.open) { const f = S.convs.find(x => x.id === S.open.id); if (f) S.open = f; }
+  paintConvs();
+}
+function paintConvs() {
+  const el = $("#list"); if (!el || S.tab !== "chats" || S.open) return;
+  if (!S.convs.length) {
+    el.innerHTML = `<div class="empty"><b>No chats yet</b>Tap + to start one. You need at least one other person signed up to chat with.</div>`;
+    return;
+  }
+  el.innerHTML = S.convs.map(c => `
+    <button class="row" data-act="open" data-id="${esc(c.id)}">
+      <div class="av" aria-hidden="true">${esc(initial(c.title))}</div>
+      <div class="g"><div class="b tr">${esc(c.title)}</div><div class="m tr">${esc(c.preview)}</div></div>
+      <div class="side"><div class="m">${esc(fmt(c.time))}</div>${c.unread ? `<span class="badge">${c.unread}</span>` : ""}</div>
+    </button>`).join("");
+}
+
+/* ---------- CHAT ---------- */
+async function openConv(id) {
+  const c = S.convs.find(x => x.id === id); if (!c) return;
+  S.open = c; S.msgs = []; renderChat();
+  const {data, error} = await sb.from("messages").select("*").eq("conversation_id", id).order("created_at", {ascending: false}).limit(200);
+  if (error) { toast(error.message); return; }
+  S.msgs = (data || []).reverse(); paintMsgs();
+  markRead(id);
+}
+function renderChat() {
+  const c = S.open;
+  root.innerHTML = `
+  <div class="app">
+    <div class="top"><button class="chip ic" data-act="back" aria-label="Back to chats">← Back</button>
+      <h1 class="tr">${esc(c.title)}</h1></div>
+    <div class="msgs" id="msgs" aria-live="polite"></div>
+    <form class="composer" id="cf" autocomplete="off">
+      <input id="mi" placeholder="Write a message…" aria-label="Message" enterkeyhint="send">
+      <button class="btn" type="submit">Send</button>
+    </form>
+  </div>`;
+  $("#cf").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const i = $("#mi"), text = i.value;
+    if (!text.trim()) return;
+    i.value = ""; i.focus();
+    const ok = await sendMsg(text);
+    if (!ok) i.value = text;
+  });
+  paintMsgs();
+}
+async function sendMsg(text) {
+  const body = text.trim(); if (!body || !S.open) return false;
+  const {data, error} = await sb.from("messages").insert({conversation_id: S.open.id, sender_id: S.user.id, body}).select().single();
+  if (error) { toast("Not sent: " + error.message); return false; }
+  addMsg(data); refreshConvsSoon();
+  return true;
+}
+function addMsg(m) {
+  if (S.msgs.some(x => x.id === m.id)) return;
+  S.msgs.push(m); paintMsgs();
+}
+function paintMsgs() {
+  const el = $("#msgs"); if (!el || !S.open) return;
+  const near = el.scrollHeight - el.scrollTop - el.clientHeight < 140;
+  let html = "", lastDay = "";
+  S.msgs.forEach(m => {
+    const d = new Date(m.created_at).toDateString();
+    if (d !== lastDay) { html += `<div class="sep">${esc(dayLabel(m.created_at))}</div>`; lastDay = d; }
+    const mine = m.sender_id === S.user.id;
+    const text = m.deleted_at ? "Message deleted" : (m.body || "[" + (m.media_type || "attachment") + "]");
+    html += `<div class="bub ${mine ? "me" : ""}">
+      ${!mine && S.open.is_group ? `<div class="who">${esc(S.names[m.sender_id] || "Someone")}</div>` : ""}
+      <div>${esc(text)}</div>
+      <div class="meta"><span>${esc(new Date(m.created_at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}))}</span>
+      ${m.deleted_at ? "" : `<button type="button" data-act="savemsg" data-id="${esc(m.id)}">Save to Vault</button>`}</div></div>`;
+  });
+  el.innerHTML = html || `<div class="empty"><b>Say hello</b>Messages here are saved to your account and appear instantly for the other person.</div>`;
+  if (near || el.dataset.first !== "1") { el.scrollTop = el.scrollHeight; el.dataset.first = "1"; }
+}
+async function markRead(id) {
+  await sb.from("conversation_members").update({last_read_at: new Date().toISOString()}).eq("conversation_id", id).eq("user_id", S.user.id);
+  const c = S.convs.find(x => x.id === id); if (c) c.unread = 0;
+}
+async function saveMsgToVault(id) {
+  const m = S.msgs.find(x => x.id === id); if (!m || !m.body) return;
+  const who = m.sender_id === S.user.id ? "You" : (S.names[m.sender_id] || "Someone");
+  const {error} = await sb.from("vault_items").insert({title: (who + ": " + m.body).slice(0, 60), category: "Messages", note: m.body, source_message_id: m.id});
+  toast(error ? "Could not save: " + error.message : "Saved to your Vault");
+}
+
+/* ---------- NEW CHAT / GROUP SHEET ---------- */
+async function openSheet() {
+  S.sheet = {mode: "dm", people: [], picked: new Set(), q: ""};
+  paintSheet();
+  const {data, error} = await sb.from("profiles").select("id,display_name,about").neq("id", S.user.id).order("display_name").limit(300);
+  if (error) { toast(error.message); return; }
+  S.sheet.people = data || []; paintSheetList();
+}
+function paintSheet() {
+  document.querySelectorAll(".sheet-bg").forEach(e => e.remove());
+  const sh = S.sheet; if (!sh) return;
+  const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.dataset.act = "sheetbg";
+  bg.innerHTML = `<div class="sheet" role="dialog" aria-modal="true" aria-label="Start a chat">
+    <div class="row" style="border:0;padding:0;margin:0;background:none;box-shadow:none">
+      <div class="g"><button class="chip ${sh.mode === "dm" ? "on" : ""}" data-act="sheetmode" data-mode="dm">Direct chat</button><button class="chip ${sh.mode === "group" ? "on" : ""}" data-act="sheetmode" data-mode="group">New group</button></div>
+      <button class="chip ic" data-act="sheetclose" aria-label="Close">✕</button></div>
+    ${sh.mode === "group" ? `<input id="gt" placeholder="Group name" aria-label="Group name" style="margin-top:8px">` : ""}
+    <input id="sq" placeholder="Search people by name" aria-label="Search people" style="margin-top:8px" value="${esc(sh.q)}">
+    <div class="list" id="plist"></div>
+    ${sh.mode === "group" ? `<button class="btn" data-act="makegroup">Create group</button>` : ""}
+  </div>`;
+  document.body.appendChild(bg);
+  $("#sq").addEventListener("input", e => { S.sheet.q = e.target.value; paintSheetList(); });
+  paintSheetList();
+}
+function paintSheetList() {
+  const el = $("#plist"); if (!el || !S.sheet) return;
+  const q = S.sheet.q.trim().toLowerCase();
+  const list = S.sheet.people.filter(p => !q || (p.display_name || "").toLowerCase().includes(q));
+  if (!list.length) { el.innerHTML = `<div class="empty"><b>No one found</b>Ask your friends to create a TREASURE account, then they appear here.</div>`; return; }
+  el.innerHTML = list.map(p => {
+    const picked = S.sheet.picked.has(p.id);
+    return `<button class="row" data-act="${S.sheet.mode === "dm" ? "startdm" : "pick"}" data-id="${esc(p.id)}">
+      <div class="av" aria-hidden="true">${esc(initial(p.display_name))}</div>
+      <div class="g"><div class="b tr">${esc(p.display_name)}</div><div class="m tr">${esc(p.about || "")}</div></div>
+      ${S.sheet.mode === "group" ? `<span class="chip ${picked ? "on" : ""}" style="margin:0">${picked ? "Added" : "Add"}</span>` : ""}</button>`;
+  }).join("");
+}
+function closeSheet() { S.sheet = null; document.querySelectorAll(".sheet-bg").forEach(e => e.remove()); }
+async function startDm(id) {
+  const {data, error} = await sb.rpc("start_direct_chat", {other: id});
+  if (error) return toast(error.message);
+  closeSheet(); await refreshConvs(); openConv(data);
+}
+async function makeGroup() {
+  const title = ($("#gt").value || "").trim(), ids = [...S.sheet.picked];
+  if (!title) return toast("Give the group a name.");
+  if (!ids.length) return toast("Add at least one person.");
+  const {data, error} = await sb.rpc("create_group", {group_title: title, member_ids: ids});
+  if (error) return toast(error.message);
+  closeSheet(); await refreshConvs(); openConv(data);
+}
+
+/* ---------- VAULT ---------- */
+const CATS = ["Documents", "Photos", "Messages", "Collections"];
+async function loadVault() {
+  const {data, error} = await sb.from("vault_items").select("*").order("created_at", {ascending: false});
+  if (error) { toast(error.message); return; }
+  S.vault = data || []; paintVault();
+}
+function viewVault() {
+  return `<form class="form" id="vf" autocomplete="off">
+    <input id="vt" placeholder="Title (e.g. Passport scan, Contract notes)" aria-label="Title">
+    <input id="vn" placeholder="Note (optional)" aria-label="Note">
+    <div class="two"><select id="vc" aria-label="Category">${CATS.map(c => `<option>${c}</option>`).join("")}</select>
+      <label class="btn o" style="text-align:center;display:block">Attach file<input id="vfile" type="file" hidden></label></div>
+    <div class="m" id="vfname" hidden></div>
+    <button class="btn" id="vsave" type="submit">Save to Vault</button>
+  </form>
+  <div id="chips"></div><div id="list"></div>`;
+}
+function bindVault() {
+  $("#vfile").addEventListener("change", e => { const f = e.target.files[0], n = $("#vfname"); n.hidden = !f; n.textContent = f ? "Attached: " + f.name : ""; });
+  $("#vf").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const f = $("#vfile").files[0], title = $("#vt").value.trim() || (f ? f.name : "");
+    if (!title) return toast("Add a title or attach a file.");
+    const btn = $("#vsave"); btn.disabled = true;
+    let path = null;
+    if (f) {
+      path = S.user.id + "/" + Date.now() + "-" + f.name.replace(/[^\w.\-]+/g, "_");
+      const up = await sb.storage.from("vault").upload(path, f, {upsert: false});
+      if (up.error) { btn.disabled = false; return toast("Upload failed: " + up.error.message); }
+    }
+    const {error} = await sb.from("vault_items").insert({title, category: $("#vc").value, note: $("#vn").value.trim() || null, storage_path: path});
+    btn.disabled = false;
+    if (error) return toast("Could not save: " + error.message);
+    $("#vf").reset(); $("#vfname").hidden = true;
+    toast("Saved to your Vault"); loadVault();
+  });
+}
+function paintVault() {
+  const ch = $("#chips"), el = $("#list"); if (!el || S.tab !== "vault") return;
+  ch.innerHTML = ["All", ...CATS].map(c => `<button class="chip ${S.vcat === c ? "on" : ""}" data-act="vcat" data-c="${c}">${c}</button>`).join("");
+  const items = S.vault.filter(v => S.vcat === "All" || v.category === S.vcat);
+  if (!items.length) { el.innerHTML = `<div class="empty"><b>Nothing here yet</b>Save documents, photos and important messages. Only you can see your Vault.</div>`; return; }
+  el.innerHTML = items.map(v => `
+    <div class="row"><div class="g">
+      <div class="b">${v.locked ? "🔒 " : ""}${esc(v.title)}</div>
+      <div class="m">${esc(v.category)} · ${esc(fmt(v.created_at))}</div>
+      ${v.note && !v.locked ? `<div class="m tr">${esc(v.note)}</div>` : ""}</div>
+      ${v.storage_path && !v.locked ? `<button class="chip" data-act="vopen" data-id="${esc(v.id)}">Open</button>` : ""}
+      <button class="chip" data-act="vfav" data-id="${esc(v.id)}" aria-label="Favourite">${v.favourite ? "★" : "☆"}</button>
+      <button class="chip" data-act="vlock" data-id="${esc(v.id)}">${v.locked ? "Unlock" : "Lock"}</button>
+      <button class="chip" data-act="vdel" data-id="${esc(v.id)}" aria-label="Delete">✕</button></div>`).join("");
+}
+async function vaultAct(act, id) {
+  const v = S.vault.find(x => x.id === id); if (!v) return;
+  if (act === "vfav" || act === "vlock") {
+    const patch = act === "vfav" ? {favourite: !v.favourite} : {locked: !v.locked};
+    const {error} = await sb.from("vault_items").update(patch).eq("id", id);
+    if (error) return toast(error.message);
+    Object.assign(v, patch); paintVault();
+  } else if (act === "vdel") {
+    if (!confirm("Delete \"" + v.title + "\" from your Vault?")) return;
+    if (v.storage_path) await sb.storage.from("vault").remove([v.storage_path]);
+    const {error} = await sb.from("vault_items").delete().eq("id", id);
+    if (error) return toast(error.message);
+    S.vault = S.vault.filter(x => x.id !== id); paintVault();
+  } else if (act === "vopen") {
+    const w = window.open("", "_blank");
+    const {data, error} = await sb.storage.from("vault").createSignedUrl(v.storage_path, 120);
+    if (error) { if (w) w.close(); return toast(error.message); }
+    if (w) w.location = data.signedUrl; else location.href = data.signedUrl;
+  }
+}
+
+/* ---------- MEMORIES ---------- */
+async function loadMems() {
+  const {data, error} = await sb.from("memories").select("*").order("occurred_on", {ascending: false});
+  if (error) { toast(error.message); return; }
+  S.mems = data || []; paintMems();
+}
+function viewMems() {
+  const today = new Date().toISOString().slice(0, 10);
+  return `<form class="form" id="mf" autocomplete="off">
+    <input id="mt" placeholder="What do you want to remember?" aria-label="Memory title">
+    <div class="two"><input id="md" type="date" value="${today}" aria-label="Date"><input id="mn" placeholder="Note (optional)" aria-label="Note"></div>
+    <button class="btn" type="submit">Save memory</button></form>
+    <div id="list"></div>`;
+}
+function bindMems() {
+  $("#mf").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const title = $("#mt").value.trim(), date = $("#md").value;
+    if (!title || !date) return toast("Add a title and a date.");
+    const {error} = await sb.from("memories").insert({title, occurred_on: date, note: $("#mn").value.trim() || null});
+    if (error) return toast("Could not save: " + error.message);
+    $("#mt").value = ""; $("#mn").value = ""; toast("Memory saved"); loadMems();
+  });
+}
+function paintMems() {
+  const el = $("#list"); if (!el || S.tab !== "memories") return;
+  if (!S.mems.length) { el.innerHTML = `<div class="empty"><b>No memories yet</b>Keep the moments that matter: a first meeting, a trip, a decision.</div>`; return; }
+  el.innerHTML = S.mems.map(m => `
+    <div class="row"><div class="g"><div class="b">${esc(m.title)}</div>
+      <div class="m">${esc(new Date(m.occurred_on + "T00:00:00").toLocaleDateString([], {day: "numeric", month: "long", year: "numeric"}))}</div>
+      ${m.note ? `<div class="m">${esc(m.note)}</div>` : ""}</div>
+      <button class="chip" data-act="mdel" data-id="${esc(m.id)}" aria-label="Delete memory">✕</button></div>`).join("");
+}
+async function delMem(id) {
+  if (!confirm("Delete this memory?")) return;
+  const {error} = await sb.from("memories").delete().eq("id", id);
+  if (error) return toast(error.message);
+  S.mems = S.mems.filter(x => x.id !== id); paintMems();
+}
+
+/* ---------- SETTINGS ---------- */
+function viewMe() {
+  const me = S.me;
+  const tg = (k, label, sub) => `<div class="row"><div class="g"><div class="b">${label}</div><div class="m">${sub}</div></div>
+    <button class="tg ${me[k] ? "on" : ""}" role="switch" aria-checked="${!!me[k]}" aria-label="${label}" data-act="tog" data-k="${k}"></button></div>`;
+  return `<form class="form" id="pf" autocomplete="off">
+      <label class="f" for="pn" style="margin:0">Your name</label><input id="pn" value="${esc(me.display_name)}">
+      <label class="f" for="pa" style="margin:4px 0 0">About</label><input id="pa" value="${esc(me.about || "")}">
+      <button class="btn" type="submit">Save profile</button></form>
+    <h2>Treasure AI</h2>
+    ${tg("ai_can_read_messages", "Let AI read my messages", "Off by default. Saved now and used when Treasure AI launches.")}
+    ${tg("ai_can_read_vault", "Let AI search my Vault", "Off by default. Saved now and used when Treasure AI launches.")}
+    <h2>App</h2>
+    <button class="btn o" id="installBtn" data-act="install" ${S.installEv ? "" : "hidden"} style="margin-bottom:8px">Install TREASURE on this phone</button>
+    <div class="m" style="margin-bottom:12px">To add it to your home screen: open the browser menu (⋮) and choose Add to Home screen.</div>
+    <div class="m" style="margin-bottom:12px">Signed in as ${esc(S.user.email || "")}</div>
+    <button class="btn o" data-act="signout">Sign out</button>`;
+}
+function bindMe() {
+  $("#pf").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const name = $("#pn").value.trim(); if (!name) return toast("Your name cannot be empty.");
+    const {data, error} = await sb.from("profiles").update({display_name: name, about: $("#pa").value.trim()}).eq("id", S.user.id).select().single();
+    if (error) return toast(error.message);
+    S.me = data; S.names[S.user.id] = data.display_name; toast("Profile saved");
+  });
+}
+async function toggleSetting(k) {
+  const val = !S.me[k];
+  const {data, error} = await sb.from("profiles").update({[k]: val}).eq("id", S.user.id).select().single();
+  if (error) return toast(error.message);
+  S.me = data; const main = $("#main"); if (main) { main.innerHTML = viewMe(); bindMe(); }
+}
+
+/* ---------- SHELL ---------- */
+const TABS = [["chats", "Chats"], ["vault", "Vault"], ["memories", "Memories"], ["me", "Me"]];
+function render() {
+  if (!S.user) return renderAuth("in");
+  if (S.open) return renderChat();
+  const title = S.tab === "chats" ? `<span class="brand">TREASURE</span>` : esc((TABS.find(t => t[0] === S.tab) || [])[1] || "");
+  const view = {chats: `<div id="list"></div><button class="fab" data-act="newchat" aria-label="New chat">+</button>`, vault: viewVault(), memories: viewMems(), me: viewMe()}[S.tab];
+  root.innerHTML = `<div class="app">
+    <div class="top"><h1>${title}</h1></div>
+    <div class="main" id="main">${view}</div>
+    <nav class="nav" aria-label="Main">${TABS.map(t => `<button class="${S.tab === t[0] ? "on" : ""}" data-act="tab" data-t="${t[0]}">${t[1]}</button>`).join("")}</nav>
+  </div>`;
+  if (S.tab === "chats") paintConvs();
+  if (S.tab === "vault") { bindVault(); paintVault(); loadVault(); }
+  if (S.tab === "memories") { bindMems(); paintMems(); loadMems(); }
+  if (S.tab === "me") bindMe();
+}
+
+/* ---------- EVENTS ---------- */
+document.addEventListener("click", async e => {
+  const el = e.target.closest("[data-act]"); if (!el) return;
+  const d = el.dataset;
+  if (d.act === "sheetbg" && e.target !== el) return;
+  switch (d.act) {
+    case "authmode": return renderAuth(d.mode);
+    case "tab": S.tab = d.t; return render();
+    case "open": return openConv(d.id);
+    case "back": S.open = null; render(); return refreshConvs();
+    case "savemsg": return saveMsgToVault(d.id);
+    case "newchat": return openSheet();
+    case "sheetclose": case "sheetbg": return closeSheet();
+    case "sheetmode": S.sheet.mode = d.mode; S.sheet.picked = new Set(); return paintSheet();
+    case "startdm": return startDm(d.id);
+    case "pick": S.sheet.picked.has(d.id) ? S.sheet.picked.delete(d.id) : S.sheet.picked.add(d.id); return paintSheetList();
+    case "makegroup": return makeGroup();
+    case "vcat": S.vcat = d.c; return paintVault();
+    case "vfav": case "vlock": case "vdel": case "vopen": return vaultAct(d.act, d.id);
+    case "mdel": return delMem(d.id);
+    case "tog": return toggleSetting(d.k);
+    case "install": if (S.installEv) { S.installEv.prompt(); S.installEv = null; el.hidden = true; } return;
+    case "signout": return signOut();
+  }
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && S.sheet) closeSheet(); });
+
+/* ---------- START ---------- */
+(async function boot() {
+  try {
+    const {data: {session}} = await sb.auth.getSession();
+    if (session) await enter(session.user); else renderAuth("in");
+  } catch (e) { renderAuth("in", "Could not reach TREASURE. Check your connection and reload."); }
+})();
+</script>
+</body>
+</html>
