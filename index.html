@@ -65,7 +65,8 @@ label.f{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
 
 .msgs{flex:1;overflow:auto;padding:10px max(14px,env(safe-area-inset-left,0px)) 10px;display:flex;flex-direction:column;gap:2px}
 .sep{align-self:center;color:var(--mute);font-size:12px;margin:10px 0 6px}
-.bub{max-width:80%;padding:7px 11px;border-radius:14px;background:var(--bubble-in);border:1px solid var(--line);align-self:flex-start;overflow-wrap:anywhere;white-space:pre-wrap}
+.bub{max-width:80%;padding:7px 11px;border-radius:14px;background:var(--bubble-in);border:1px solid var(--line);align-self:flex-start;overflow-wrap:anywhere}
+.bub .txt{white-space:pre-wrap}
 .bub.me{align-self:flex-end;background:var(--red);color:var(--on-red);border-color:var(--red)}
 .bub .who{font-size:12px;font-weight:700;color:var(--red);margin-bottom:1px}
 .bub .meta{font-size:11px;opacity:.7;margin-top:2px;display:flex;gap:8px;white-space:normal}
@@ -347,7 +348,7 @@ function paintMsgs() {
     const text = m.deleted_at ? "Message deleted" : (m.body || "[" + (m.media_type || "attachment") + "]");
     html += `<div class="bub ${mine ? "me" : ""}">
       ${!mine && S.open.is_group ? `<div class="who">${esc(S.names[m.sender_id] || "Someone")}</div>` : ""}
-      <div>${esc(text)}</div>
+      <div class="txt">${esc(text)}</div>
       <div class="meta"><span>${esc(new Date(m.created_at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}))}</span>
       ${m.deleted_at ? "" : `<button type="button" data-act="savemsg" data-id="${esc(m.id)}">Save to Vault</button>`}</div></div>`;
   });
