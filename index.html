@@ -3,19 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#b3121f">
+<meta name="theme-color" content="#0e0a0b">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="TREASURE">
 <title>TREASURE</title>
 <style>
 :root{
-  --bg:#f6f4f2; --card:#ffffff; --ink:#17120f; --mute:#6b625c; --line:#e6e1dc;
-  --red:#b3121f; --on-red:#ffffff; --bubble-in:#ffffff; --shadow:0 1px 2px rgba(23,18,15,.06);
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root{--bg:#121010; --card:#1c1918; --ink:#f3eeea; --mute:#a39a93; --line:#2e2927; --red:#c8202d; --bubble-in:#25211f; --shadow:none; color-scheme:dark}
+  --bg:#0e0a0b; --card:#171112; --ink:#f5eff0; --mute:#a99da0; --line:#2b2224;
+  --red:#c4182b; --on-red:#ffffff; --bubble-in:#262022; --shadow:none;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
@@ -28,13 +25,14 @@ button{cursor:pointer}
 .app{height:100dvh;max-width:720px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg);
   padding-top:env(safe-area-inset-top,0px);border-inline:1px solid transparent}
 @media(min-width:760px){.app{border-inline-color:var(--line)}}
-.top{display:flex;align-items:center;gap:10px;padding:12px max(16px,env(safe-area-inset-left,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);background:var(--card);min-height:56px}
-.top h1{margin:0;font-size:18px;font-weight:700;flex:1;min-width:0}
+.top{display:flex;align-items:center;gap:10px;padding:12px max(16px,env(safe-area-inset-left,0px)) 10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);background:linear-gradient(180deg,#2c0c12 0%,var(--card) 100%);min-height:56px}
+.top h1{margin:0;font-size:18px;font-weight:700;flex:1;min-width:0;display:flex;align-items:center;gap:10px}
 .brand{color:var(--red);letter-spacing:.22em;font-weight:800}
 .main{flex:1;overflow:auto;padding:12px max(16px,env(safe-area-inset-left,0px)) 96px;-webkit-overflow-scrolling:touch}
 .nav{display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
-.nav button{flex:1;background:none;border:0;padding:13px 0;font-size:13px;color:var(--mute)}
-.nav button.on{color:var(--red);font-weight:700;box-shadow:inset 0 2px 0 var(--red)}
+.nav button{flex:1;background:none;border:0;padding:8px 0 7px;font-size:11px;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
+.nav button.on{color:#fff;font-weight:700}
+.nav button.on svg{color:var(--red);filter:drop-shadow(0 0 6px rgba(196,24,43,.65))}
 
 .row{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
 button.row:active{background:var(--bg)}
@@ -43,7 +41,7 @@ button.row:active{background:var(--bg)}
 .b{font-weight:600}
 .m{color:var(--mute);font-size:13px}
 .side{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}
-.av{width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:700;flex:none}
+.av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#c4182b,#6e0b17);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
 .badge{background:var(--red);color:var(--on-red);border-radius:99px;font-size:11px;font-weight:700;padding:1px 7px;min-width:20px;text-align:center}
 
 .btn{background:var(--red);color:var(--on-red);border:0;border-radius:10px;padding:10px 16px;font-weight:600}
@@ -51,7 +49,7 @@ button.row:active{background:var(--bg)}
 .btn.s{padding:6px 12px;font-size:13px}
 .btn:disabled{opacity:.55}
 .chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 13px;margin:0 6px 8px 0;font-size:13px}
-.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip.on{background:var(--red);color:#fff;border-color:var(--red)}
 .chip.ic{padding:6px 10px}
 input,select,textarea{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
 label.f{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
@@ -67,7 +65,7 @@ label.f{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
 .sep{align-self:center;color:var(--mute);font-size:12px;margin:10px 0 6px}
 .bub{max-width:80%;padding:7px 11px;border-radius:14px;background:var(--bubble-in);border:1px solid var(--line);align-self:flex-start;overflow-wrap:anywhere}
 .bub .txt{white-space:pre-wrap}
-.bub.me{align-self:flex-end;background:var(--red);color:var(--on-red);border-color:var(--red)}
+.bub.me{align-self:flex-end;background:linear-gradient(135deg,#9a1022,#6e0b17);color:var(--on-red);border-color:#8f0f1e}
 .bub .who{font-size:12px;font-weight:700;color:var(--red);margin-bottom:1px}
 .bub .meta{font-size:11px;opacity:.7;margin-top:2px;display:flex;gap:8px;white-space:normal}
 .bub .meta button{background:none;border:0;padding:0;color:inherit;text-decoration:underline;font-size:11px}
@@ -84,11 +82,11 @@ label.f{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
 .bub audio{display:block;width:230px;max-width:100%}
 .bub a.file{color:inherit;text-decoration:underline;display:block;padding:2px 0}
 
-.auth{min-height:100dvh;display:grid;place-items:center;padding:24px max(20px,env(safe-area-inset-left,0px));background:#17120f;color:#fff}
+.auth{min-height:100dvh;display:grid;place-items:center;padding:24px max(20px,env(safe-area-inset-left,0px));background:radial-gradient(120% 80% at 50% 0%,#7d0c19 0%,#2a0a0f 55%,#0e0a0b 100%);color:#fff}
 .auth .box{width:100%;max-width:380px}
 .auth h1{font-size:36px;letter-spacing:.25em;margin:0 0 4px;color:#fff;font-weight:800}
 .auth .tag{letter-spacing:.2em;font-size:12px;opacity:.8;margin:0 0 22px}
-.auth input{background:#241e1b;border-color:#3a322e;color:#fff;margin-bottom:10px}
+.auth input{background:rgba(0,0,0,.35);border-color:#5a2029;color:#fff;margin-bottom:10px}
 .auth .err{color:#ffb4ab;min-height:20px;font-size:14px;margin:2px 0 8px}
 .auth .ok{color:#b8f0c8}
 .auth .btn{width:100%;padding:12px}
@@ -98,7 +96,7 @@ label.f{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
 .sheet{background:var(--card);border-radius:16px 16px 0 0;width:100%;max-width:720px;max-height:86dvh;display:flex;flex-direction:column;padding:14px max(16px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px))}
 .sheet .list{overflow:auto;flex:1;margin:10px 0}
 .sheet .row{box-shadow:none}
-.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#17120f;color:#fff;padding:9px 16px;border-radius:99px;z-index:50;max-width:90%;font-size:14px;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#2a1014;border:1px solid #5a1a24;color:#fff;padding:9px 16px;border-radius:99px;z-index:50;max-width:90%;font-size:14px;text-align:center}
 .tg{width:44px;height:26px;border-radius:99px;background:var(--line);border:0;position:relative;flex:none;padding:0}
 .tg:after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}
 .tg.on{background:var(--red)}.tg.on:after{left:21px}
@@ -109,10 +107,65 @@ h2{font-size:15px;margin:20px 0 8px}
 .av{overflow:hidden}.av img{width:100%;height:100%;object-fit:cover;display:block}
 .av.lg{width:84px;height:84px;font-size:32px;margin:0 auto 8px}
 .search{margin-bottom:10px}
-.chatbar{display:flex;gap:8px;align-items:center;padding:8px max(14px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);background:var(--card)}
-.chatbar input{flex:1}
+.chatbar{padding:8px max(14px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);background:var(--card)}
 .tabbadge{display:inline-block;margin-left:6px;vertical-align:middle}
 .danger{color:#c4202d;border-color:#c4202d}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.logo{display:block;object-fit:contain}
+.auth .logo{margin:0 auto 14px;width:84px;height:auto}
+.auth h1,.auth .tag{text-align:center}
+.top .g h1{display:block;font-size:17px;flex:none}
+.chips{display:flex;gap:6px;overflow-x:auto;margin:0 0 10px;padding-bottom:2px;scrollbar-width:none}
+.chips .chip{margin:0;white-space:nowrap;flex:none}
+.search{border-radius:99px;padding-left:16px}
+.ib.sm{width:38px;height:38px}
+.ib.dim{opacity:.45}
+.ib.send{background:linear-gradient(135deg,#d11f33,#8f0f1e);border:0;color:#fff}
+.fab svg{width:26px;height:26px;stroke-width:2.2}
+.fab{background:linear-gradient(135deg,#d11f33,#8f0f1e);display:grid;place-items:center}
+.row{border-radius:14px}
+.un{color:var(--ink);font-weight:600}
+.av.md{width:56px;height:56px;font-size:22px}
+.ring{padding:3px;border-radius:50%;border:2px solid var(--line);flex:none}
+.ring.new{border-color:var(--red)}
+.ring .av{width:44px;height:44px}
+.nav .navbadge{position:absolute;top:3px;left:calc(50% + 6px);font-size:10px;padding:0 5px;min-width:16px}
+.emo{border-top:1px solid var(--line);background:var(--card);max-height:210px;overflow:auto;padding:4px max(12px,env(safe-area-inset-left,0px)) 8px}
+.emo h3{font-size:12px;color:var(--mute);margin:8px 0 4px;font-weight:600;letter-spacing:.04em}
+.emo .eg{display:flex;flex-wrap:wrap;gap:2px}
+.emo button{background:none;border:0;font-size:25px;line-height:1;padding:5px;border-radius:8px}
+.bub{position:relative}
+.rxs,.tgs{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.rx{background:rgba(255,255,255,.12);border:1px solid transparent;border-radius:99px;padding:1px 8px;font-size:13px;color:inherit}
+.rx.on{border-color:rgba(255,255,255,.45)}
+.tagc{font-size:11px;border:1px solid currentColor;border-radius:99px;padding:0 7px;opacity:.85}
+.bub .meta .mm{margin-left:auto;text-decoration:none;font-size:16px;line-height:1;padding:0 2px}
+.qr{display:flex;justify-content:space-between;gap:6px}
+.qb{flex:1;font-size:24px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 0}
+.qb.on{border-color:var(--red);background:#2a0d12}
+.mact{margin-top:10px}.mact .row{margin-bottom:6px}
+.cbrow{display:flex;gap:8px;align-items:center}.cbrow input{flex:1}
+.tsprev{border-radius:16px;min-height:200px;display:grid;place-items:center;padding:16px}
+.tsprev textarea{background:transparent;border:0;color:#fff;font-size:22px;font-weight:600;text-align:center;resize:none;width:100%}
+.tsprev textarea::placeholder{color:rgba(255,255,255,.6)}
+.sw{display:flex;gap:10px;margin:12px 0}
+.swatch{width:34px;height:34px;border-radius:50%;border:2px solid transparent;padding:0}
+.swatch.on{border-color:#fff;outline:2px solid var(--red)}
+.sv{position:fixed;inset:0;background:#000;z-index:60;display:flex;flex-direction:column;color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.svbars{display:flex;gap:4px;padding:8px 12px 4px}
+.svbars i{flex:1;height:3px;background:rgba(255,255,255,.3);border-radius:2px;overflow:hidden;position:relative}
+.svbars i.d{background:#fff}
+.svbars i.c:after{content:"";position:absolute;inset:0;background:#fff;transform-origin:left;animation:svp 5s linear forwards}
+@keyframes svp{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.svhead{display:flex;align-items:center;gap:10px;padding:6px 12px;position:relative;z-index:3}
+.svhead .ib{background:rgba(0,0,0,.4);border-color:rgba(255,255,255,.25);color:#fff}
+.svbody{flex:1;display:grid;place-items:center;overflow:hidden;position:relative}
+.svbody img{max-width:100%;max-height:100%;object-fit:contain}
+.svtxt{font-size:28px;font-weight:700;text-align:center;padding:24px;white-space:pre-wrap;overflow-wrap:anywhere}
+.svcap{padding:12px 16px;text-align:center;background:rgba(0,0,0,.55);position:relative;z-index:3}
+.svviews{padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));text-align:center;font-size:13px;position:relative;z-index:3}
+.svnav{position:absolute;top:84px;bottom:70px;width:40%;background:none;border:0;z-index:2}
+.svnav.l{left:0}.svnav.r{right:0}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -134,11 +187,33 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = s => document.querySelector(s);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const initial = n => (String(n || "?").trim()[0] || "?").toUpperCase();
+const LOGO = "data:image/png;base64,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";
+const IC = {
+  back: '<path d="M15 18l-6-6 6-6"/>',
+  phone: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',
+  video: '<path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  send: '<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>',
+  smile: '<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/>',
+  clip: '<path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/>',
+  mic: '<rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+  chats: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  status: '<circle cx="12" cy="12" r="9" stroke-dasharray="4 3"/><circle cx="12" cy="12" r="3.5"/>',
+  vault: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  memories: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',
+  me: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  x: '<path d="M18 6L6 18M6 6l12 12"/>',
+  trash: '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'
+};
+const ico = n => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ""}</svg>`;
+const SQLHINT = e => /does not exist|schema cache|relation/i.test((e && e.message) || "") ? "Run the Update 4 SQL in Supabase first." : ((e && e.message) || "Something went wrong");
+
 const S = {
   user: null, me: null, tab: "chats",
   convs: [], names: {}, open: null, msgs: [],
   vault: [], vcat: "All", mems: [], channel: null, installEv: null, sheet: null,
-  avatars: {}, q: "", msgQ: null
+  avatars: {}, q: "", msgQ: null, cf: "all", reacts: {}, tags: {}, tagF: null, mm: null, stories: [], seen: new Set(), sv: null, tsBg: null, channel2: null
 };
 const root = $("#root");
 
@@ -168,27 +243,37 @@ function toast(msg) {
 
 /* ---------- ICON + MANIFEST (drawn in the browser so the app is one file) ---------- */
 function makeIcon(size) {
-  const c = document.createElement("canvas"); c.width = c.height = size;
-  const g = c.getContext("2d");
-  g.fillStyle = "#b3121f"; g.fillRect(0, 0, size, size);
-  g.fillStyle = "#ffffff"; g.font = "800 " + Math.round(size * 0.62) + "px system-ui,sans-serif";
-  g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("T", size / 2, size / 2 + size * 0.03);
-  return c.toDataURL("image/png");
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement("canvas"); c.width = c.height = size;
+      const g = c.getContext("2d");
+      g.fillStyle = "#b3121f"; g.fillRect(0, 0, size, size);
+      const h = size * 0.58, w = h * img.width / img.height;
+      g.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+      res(c.toDataURL("image/png"));
+    };
+    img.onerror = () => res("");
+    img.src = LOGO;
+  });
 }
-try {
-  const i192 = makeIcon(192), i512 = makeIcon(512);
-  const apple = document.createElement("link"); apple.rel = "apple-touch-icon"; apple.href = makeIcon(180); document.head.appendChild(apple);
-  const fav = document.createElement("link"); fav.rel = "icon"; fav.href = i192; document.head.appendChild(fav);
-  const base = location.origin + location.pathname.replace(/[^/]*$/, "");
-  const manifest = {
-    name: "TREASURE", short_name: "TREASURE", start_url: base, scope: base, display: "standalone",
-    background_color: "#17120f", theme_color: "#b3121f",
-    icons: [{src: i192, sizes: "192x192", type: "image/png", purpose: "any"}, {src: i512, sizes: "512x512", type: "image/png", purpose: "any"}]
-  };
-  const ml = document.createElement("link"); ml.rel = "manifest";
-  ml.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: "application/manifest+json"}));
-  document.head.appendChild(ml);
-} catch (e) { /* the app still works without install support */ }
+(async () => {
+  try {
+    const [i192, i512, i180] = await Promise.all([makeIcon(192), makeIcon(512), makeIcon(180)]);
+    if (!i192) return;
+    const apple = document.createElement("link"); apple.rel = "apple-touch-icon"; apple.href = i180; document.head.appendChild(apple);
+    const fav = document.createElement("link"); fav.rel = "icon"; fav.href = i192; document.head.appendChild(fav);
+    const base = location.origin + location.pathname.replace(/[^/]*$/, "");
+    const manifest = {
+      name: "TREASURE", short_name: "TREASURE", start_url: base, scope: base, display: "standalone",
+      background_color: "#0e0a0b", theme_color: "#b3121f",
+      icons: [{src: i192, sizes: "192x192", type: "image/png", purpose: "any"}, {src: i512, sizes: "512x512", type: "image/png", purpose: "any"}]
+    };
+    const ml = document.createElement("link"); ml.rel = "manifest";
+    ml.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: "application/manifest+json"}));
+    document.head.appendChild(ml);
+  } catch (e) { /* the app still works without install support */ }
+})();
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); S.installEv = e; const b = $("#installBtn"); if (b) b.hidden = false; });
 
 /* ---------- INVITE LINKS ---------- */
@@ -250,7 +335,7 @@ function renderAuth(mode, msg, ok) {
   const forgot = mode === "forgot";
   root.innerHTML = `
   <div class="auth"><form class="box" id="authForm" novalidate>
-    <h1>TREASURE</h1><p class="tag">DISCOVER. CONNECT. VALUE.</p>
+    <img class="logo" src="${LOGO}" alt="TREASURE logo"><h1>TREASURE</h1><p class="tag">DISCOVER. CONNECT. VALUE.</p>
     ${pendingAdd() ? `<p class="tag" style="opacity:1;letter-spacing:.04em;font-size:14px">A friend invited you to chat on TREASURE. Sign in or create an account to start.</p>` : ""}
     ${forgot ? `<p class="tag" style="opacity:1;letter-spacing:.04em;font-size:14px">Enter your email and we will send you a link to choose a new password.</p>` : ""}
     ${mode === "up" ? `<input id="an" autocomplete="name" placeholder="Your name" aria-label="Your name">` : ""}
@@ -267,7 +352,7 @@ function renderAuth(mode, msg, ok) {
 function renderReset(msg) {
   root.innerHTML = `
   <div class="auth"><form class="box" id="resetForm" novalidate>
-    <h1>TREASURE</h1><p class="tag">CHOOSE A NEW PASSWORD</p>
+    <img class="logo" src="${LOGO}" alt="TREASURE logo"><h1>TREASURE</h1><p class="tag">CHOOSE A NEW PASSWORD</p>
     <input id="np" type="password" autocomplete="new-password" placeholder="New password (6+ characters)" aria-label="New password">
     <input id="np2" type="password" autocomplete="new-password" placeholder="Repeat new password" aria-label="Repeat new password">
     <div class="err" id="aerr" role="alert">${esc(msg || "")}</div>
@@ -351,8 +436,14 @@ function startRealtime() {
     .on("postgres_changes", {event: "UPDATE", schema: "public", table: "messages"}, p => onMsgUpdate(p.new))
     .on("postgres_changes", {event: "INSERT", schema: "public", table: "conversation_members"}, () => refreshConvsSoon())
     .subscribe();
+  S.channel2 = sb.channel("treasure-react")
+    .on("postgres_changes", {event: "*", schema: "public", table: "message_reactions"}, () => { if (S.open) loadMetaSoon(); })
+    .subscribe();
 }
-function stopRealtime() { if (S.channel) { sb.removeChannel(S.channel); S.channel = null; } }
+function stopRealtime() {
+  if (S.channel) { sb.removeChannel(S.channel); S.channel = null; }
+  if (S.channel2) { sb.removeChannel(S.channel2); S.channel2 = null; }
+}
 let rcTimer;
 function refreshConvsSoon() { clearTimeout(rcTimer); rcTimer = setTimeout(refreshConvs, 250); }
 function onNewMessage(m) {
@@ -389,7 +480,7 @@ function updateBadge() {
   const n = S.convs.reduce((a, c) => a + (c.unread || 0), 0);
   document.title = n ? "(" + n + ") TREASURE" : "TREASURE";
   try { if (navigator.setAppBadge) { n ? navigator.setAppBadge(n) : navigator.clearAppBadge(); } } catch (e) {}
-  const t = $("#chatsTab"); if (t) t.innerHTML = "Chats" + (n ? ` <span class="badge tabbadge">${n}</span>` : "");
+  const t = $("#cbadge"); if (t) { t.hidden = !n; t.textContent = n > 99 ? "99+" : n; }
 }
 document.addEventListener("visibilitychange", () => { if (!document.hidden && S.open && S.user) { markRead(S.open.id); refreshConvsSoon(); } });
 
@@ -462,13 +553,13 @@ function paintConvs() {
     el.innerHTML = `<div class="empty"><b>No chats yet</b>Tap + to start one, or share your invite link from the Me tab.</div>`;
     return;
   }
-  const q = (S.q || "").trim().toLowerCase();
-  const list = q ? S.convs.filter(c => c.title.toLowerCase().includes(q) || c.preview.toLowerCase().includes(q)) : S.convs;
-  if (!list.length) { el.innerHTML = `<div class="empty"><b>No chats match</b>Try a different name or word.</div>`; return; }
+  const q = (S.q || "").trim().toLowerCase(), f = S.cf || "all";
+  const list = S.convs.filter(c => (f === "all" || (f === "group") === !!c.is_group) && (!q || c.title.toLowerCase().includes(q) || c.preview.toLowerCase().includes(q)));
+  if (!list.length) { el.innerHTML = `<div class="empty"><b>No chats here</b>Try a different filter, name or word.</div>`; return; }
   el.innerHTML = list.map(c => `
     <button class="row" data-act="open" data-id="${esc(c.id)}">
       ${avatarHtml(c.uid, c.title)}
-      <div class="g"><div class="b tr">${esc(c.title)}</div><div class="m tr">${esc(c.preview)}</div></div>
+      <div class="g"><div class="b tr">${esc(c.title)}</div><div class="m tr ${c.unread ? "un" : ""}">${esc(c.preview)}</div></div>
       <div class="side"><div class="m">${esc(fmt(c.time))}</div>${c.unread ? `<span class="badge">${c.unread}</span>` : ""}</div>
     </button>`).join("");
 }
@@ -476,32 +567,43 @@ function paintConvs() {
 /* ---------- CHAT ---------- */
 async function openConv(id) {
   const c = S.convs.find(x => x.id === id); if (!c) return;
-  S.open = c; S.msgs = []; S.msgQ = null; renderChat();
+  S.open = c; S.msgs = []; S.msgQ = null; S.tagF = null; S.reacts = {}; S.tags = {}; renderChat();
   const {data, error} = await sb.from("messages").select("*").eq("conversation_id", id).order("created_at", {ascending: false}).limit(200);
   if (error) { toast(error.message); return; }
   S.msgs = (data || []).reverse(); paintMsgs();
   markRead(id);
+  loadMeta(id);
 }
+const EMOJI = [
+  ["Smileys", "😀😃😄😁😆😅😂🤣😊🙂😉😍🥰😘😋😎🤩🥳😏😌😴🤔🤗😬🙄😢😭😤😡🤯😱🥺😇🤤🤭"],
+  ["Hands", "👍👎👏🙌🙏🤝💪✌️🤞👌🤙👋🫶🤲👀🫡"],
+  ["Hearts and fun", "❤️🧡💛💚💙💜🖤🤍💔💯🔥✨⭐🎉🎊🎁🏆👑💎💰"],
+  ["Everyday", "🍚🍗🍕🍔🍺🥂☕🚗✈️🏠📱💻📷🎵⚽🇳🇬"]
+];
 function renderChat() {
   const c = S.open;
   root.innerHTML = `
   <div class="app">
-    <div class="top"><button class="chip ic" data-act="back" aria-label="Back to chats">← Back</button>
+    <div class="top"><button class="ib sm" data-act="back" aria-label="Back to chats">${ico("back")}</button>
       ${avatarHtml(c.uid, c.title)}
-      <h1 class="tr">${esc(c.title)}</h1>
-      <button class="chip ic" data-act="msgsearch" aria-label="Search in this chat">Search</button></div>
-    <div class="chatbar" id="chatbar" hidden><input id="msq" type="search" placeholder="Search this chat" aria-label="Search this chat"><button class="chip ic" data-act="msgsearch">Close</button></div>
+      <div class="g"><h1 class="tr">${esc(c.title)}</h1>${c.is_group ? `<div class="m">Group chat</div>` : ""}</div>
+      <button class="ib sm dim" data-act="callsoon" aria-label="Voice call (coming soon)">${ico("phone")}</button>
+      <button class="ib sm dim" data-act="callsoon" aria-label="Video call (coming soon)">${ico("video")}</button>
+      <button class="ib sm" data-act="msgsearch" aria-label="Search in this chat">${ico("search")}</button></div>
+    <div class="chatbar" id="chatbar" hidden>
+      <div class="cbrow"><input id="msq" type="search" placeholder="Search words or tags" aria-label="Search this chat"><button class="chip ic" data-act="msgsearch" style="margin:0">Close</button></div>
+      <div class="chips" id="tagchips" style="margin:8px 0 0" hidden></div></div>
     <div class="msgs" id="msgs" aria-live="polite"></div>
+    <div class="emo" id="emo" hidden>${EMOJI.map(g => `<h3>${esc(g[0])}</h3><div class="eg">${[...g[1].matchAll(/\p{Extended_Pictographic}️?|\p{Regional_Indicator}{2}/gu)].map(m => `<button type="button" data-act="emo" data-e="${m[0]}" aria-label="Emoji ${m[0]}">${m[0]}</button>`).join("")}</div>`).join("")}</div>
     <form class="composer" id="cf" autocomplete="off">
       <label class="ib" aria-label="Attach a photo, video or file" title="Attach">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg>
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC.clip}</svg>
         <input id="fi" type="file" hidden accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv">
       </label>
+      <button class="ib" type="button" data-act="emojitoggle" aria-label="Emoji" title="Emoji">${ico("smile")}</button>
       <input id="mi" placeholder="Write a message…" aria-label="Message" enterkeyhint="send">
-      <button class="ib" type="button" data-act="mic" aria-label="Record a voice note" title="Voice note">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-      </button>
-      <button class="btn" type="submit">Send</button>
+      <button class="ib" type="button" data-act="mic" aria-label="Record a voice note" title="Voice note">${ico("mic")}</button>
+      <button class="ib send" type="submit" aria-label="Send">${ico("send")}</button>
     </form>
     <div class="rec" id="rec" hidden>
       <span class="dot" aria-hidden="true"></span><span class="g">Recording <span id="rt">0:00</span></span>
@@ -635,26 +737,33 @@ function paintMsgs() {
   const el = $("#msgs"); if (!el || !S.open) return;
   const near = el.scrollHeight - el.scrollTop - el.clientHeight < 140;
   let html = "", lastDay = "";
-  const sq = (S.msgQ || "").trim().toLowerCase();
-  const shown = sq ? S.msgs.filter(m => !m.deleted_at && (m.body || "").toLowerCase().includes(sq)) : S.msgs;
+  const sq = (S.msgQ || "").trim().toLowerCase(), tf = S.tagF;
+  const tagsOf = m => S.tags[m.id] || [];
+  const shown = (sq || tf) ? S.msgs.filter(m => !m.deleted_at
+    && (!sq || (m.body || "").toLowerCase().includes(sq) || tagsOf(m).some(t => t.toLowerCase().includes(sq)))
+    && (!tf || tagsOf(m).includes(tf))) : S.msgs;
   shown.forEach(m => {
     const d = new Date(m.created_at).toDateString();
     if (d !== lastDay) { html += `<div class="sep">${esc(dayLabel(m.created_at))}</div>`; lastDay = d; }
     const mine = m.sender_id === S.user.id;
     const text = m.deleted_at ? "Message deleted" : (m.body || "");
-    const canSave = !m.deleted_at && m.body;
-    const canDelete = mine && !m.deleted_at;
-    html += `<div class="bub ${mine ? "me" : ""}">
+    const id = esc(m.id);
+    const groups = {};
+    (S.reacts[m.id] || []).forEach(r => { (groups[r.emoji] = groups[r.emoji] || []).push(r.user_id); });
+    const rxHtml = Object.keys(groups).length ? `<div class="rxs">${Object.keys(groups).map(e => `<button type="button" class="rx ${groups[e].includes(S.user.id) ? "on" : ""}" data-act="react" data-id="${id}" data-e="${esc(e)}">${esc(e)}${groups[e].length > 1 ? " " + groups[e].length : ""}</button>`).join("")}</div>` : "";
+    const tg = tagsOf(m);
+    const tgHtml = tg.length ? `<div class="tgs">${tg.map(t => `<span class="tagc">#${esc(t)}</span>`).join("")}</div>` : "";
+    html += `<div class="bub ${mine ? "me" : ""}" ${m.deleted_at ? "" : `data-act="msgmenu" data-id="${id}"`}>
       ${!mine && S.open.is_group ? `<div class="who">${esc(S.names[m.sender_id] || "Someone")}</div>` : ""}
       ${mediaHtml(m)}
       ${text ? `<div class="txt" ${m.deleted_at ? 'style="font-style:italic;opacity:.7"' : ""}>${esc(text)}</div>` : ""}
+      ${tgHtml}${rxHtml}
       <div class="meta"><span>${esc(new Date(m.created_at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}))}</span>
-      ${canSave ? `<button type="button" data-act="savemsg" data-id="${esc(m.id)}">Save to Vault</button>` : ""}
-      ${canDelete ? `<button type="button" data-act="delmsg" data-id="${esc(m.id)}">Delete</button>` : ""}</div></div>`;
+      ${m.deleted_at ? "" : `<button type="button" class="mm" data-act="msgmenu" data-id="${id}" aria-label="Message options: react, tag, save">⋯</button>`}</div></div>`;
   });
   S.stick = near || el.dataset.first !== "1";
-  el.innerHTML = html || (sq
-    ? `<div class="empty"><b>No messages match</b>Try a different word.</div>`
+  el.innerHTML = html || ((sq || tf)
+    ? `<div class="empty"><b>No messages match</b>Try a different word or tag.</div>`
     : `<div class="empty"><b>Say hello</b>Messages here are saved to your account and appear instantly for the other person.</div>`);
   if (S.stick) { el.scrollTop = el.scrollHeight; el.dataset.first = "1"; }
   hydrateMedia();
@@ -672,7 +781,7 @@ function toggleMsgSearch() {
   const bar = $("#chatbar"); if (!bar) return;
   const open = bar.hidden;
   bar.hidden = !open; S.msgQ = open ? "" : null;
-  if (open) { const i = $("#msq"); i.value = ""; i.focus(); } else paintMsgs();
+  if (open) { const i = $("#msq"); i.value = ""; i.focus(); paintTagChips(); } else { S.tagF = null; paintMsgs(); }
 }
 async function markRead(id) {
   await sb.from("conversation_members").update({last_read_at: new Date().toISOString()}).eq("conversation_id", id).eq("user_id", S.user.id);
@@ -683,6 +792,216 @@ async function saveMsgToVault(id) {
   const who = m.sender_id === S.user.id ? "You" : (S.names[m.sender_id] || "Someone");
   const {error} = await sb.from("vault_items").insert({title: (who + ": " + m.body).slice(0, 60), category: "Messages", note: m.body, source_message_id: m.id});
   toast(error ? "Could not save: " + error.message : "Saved to your Vault");
+}
+
+/* ---------- MESSAGE MENU: REACTIONS, TAGS, COPY, SAVE, DELETE ---------- */
+const QUICK = ["👍", "❤️", "😂", "😮", "😢", "🙏"];
+const TAGS = ["Important", "To-do", "Idea", "Money", "Contract"];
+let metaTimer;
+function loadMetaSoon() { clearTimeout(metaTimer); metaTimer = setTimeout(() => S.open && loadMeta(S.open.id), 300); }
+async function loadMeta(convId) {
+  const [r, t] = await Promise.all([
+    sb.from("message_reactions").select("message_id,user_id,emoji").eq("conversation_id", convId),
+    sb.from("message_tags").select("message_id,tag").eq("conversation_id", convId).eq("user_id", S.user.id)
+  ]);
+  if (!S.open || S.open.id !== convId) return;
+  S.reacts = {}; S.tags = {};
+  (r.data || []).forEach(x => { (S.reacts[x.message_id] = S.reacts[x.message_id] || []).push(x); });
+  (t.data || []).forEach(x => { (S.tags[x.message_id] = S.tags[x.message_id] || []).push(x.tag); });
+  paintMsgs(); paintTagChips();
+}
+function openMsgMenu(id) { S.mm = id; paintMenu(); }
+function closeMenu() { S.mm = null; document.querySelectorAll("#mmbg").forEach(e => e.remove()); }
+function paintMenu() {
+  const keep = $("#ctag") ? $("#ctag").value : "";
+  document.querySelectorAll("#mmbg").forEach(e => e.remove());
+  const m = S.msgs.find(x => x.id === S.mm); if (!m || m.deleted_at) return;
+  const id = esc(m.id), mine = m.sender_id === S.user.id, my = S.tags[m.id] || [];
+  const myR = (S.reacts[m.id] || []).find(r => r.user_id === S.user.id);
+  const chips = [...TAGS, ...my.filter(t => !TAGS.includes(t))];
+  const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.id = "mmbg"; bg.dataset.act = "mmbg";
+  bg.innerHTML = `<div class="sheet" role="dialog" aria-modal="true" aria-label="Message options">
+    <div class="qr">${QUICK.map(e => `<button type="button" class="qb ${myR && myR.emoji === e ? "on" : ""}" data-act="react" data-id="${id}" data-e="${e}" aria-label="React ${e}">${e}</button>`).join("")}</div>
+    <div class="m" style="margin:14px 0 6px">Tags (only you see your tags)</div>
+    <div>${chips.map(t => `<button type="button" class="chip ${my.includes(t) ? "on" : ""}" data-act="tagtoggle" data-id="${id}" data-t="${esc(t)}">#${esc(t)}</button>`).join("")}</div>
+    <div style="display:flex;gap:8px;margin-top:2px"><input id="ctag" maxlength="24" placeholder="Make a new tag" aria-label="New tag" value="${esc(keep)}"><button class="btn s" type="button" data-act="tagadd" data-id="${id}">Add</button></div>
+    <div class="mact">
+      ${m.body ? `<button class="row" type="button" data-act="copymsg" data-id="${id}">Copy text</button><button class="row" type="button" data-act="savemsg" data-id="${id}">Save to Vault</button>` : ""}
+      ${mine ? `<button class="row danger" type="button" data-act="delmsg" data-id="${id}">Delete for everyone</button>` : ""}
+    </div></div>`;
+  document.body.appendChild(bg);
+}
+async function react(id, emoji) {
+  const m = S.msgs.find(x => x.id === id); if (!m) return;
+  const list = S.reacts[id] || [], mine = list.find(r => r.user_id === S.user.id);
+  let error;
+  if (mine && mine.emoji === emoji) {
+    ({error} = await sb.from("message_reactions").delete().eq("message_id", id).eq("user_id", S.user.id));
+    if (!error) S.reacts[id] = list.filter(r => r.user_id !== S.user.id);
+  } else {
+    ({error} = await sb.from("message_reactions").upsert({message_id: id, conversation_id: m.conversation_id, user_id: S.user.id, emoji}, {onConflict: "message_id,user_id"}));
+    if (!error) S.reacts[id] = list.filter(r => r.user_id !== S.user.id).concat({message_id: id, user_id: S.user.id, emoji});
+  }
+  if (error) return toast(SQLHINT(error));
+  paintMsgs();
+}
+async function toggleTag(id, tag) {
+  const m = S.msgs.find(x => x.id === id); if (!m) return;
+  const cur = S.tags[id] || []; let error;
+  if (cur.includes(tag)) {
+    ({error} = await sb.from("message_tags").delete().eq("message_id", id).eq("user_id", S.user.id).eq("tag", tag));
+    if (!error) S.tags[id] = cur.filter(t => t !== tag);
+  } else {
+    ({error} = await sb.from("message_tags").insert({message_id: id, conversation_id: m.conversation_id, user_id: S.user.id, tag}));
+    if (!error) S.tags[id] = cur.concat(tag);
+  }
+  if (error) return toast(SQLHINT(error));
+  if (S.tagF && !(S.tags[id] || []).includes(S.tagF) && !Object.values(S.tags).some(a => a.includes(S.tagF))) S.tagF = null;
+  paintMenu(); paintMsgs(); paintTagChips();
+}
+async function addTag(id) {
+  const i = $("#ctag"); if (!i) return;
+  const t = i.value.trim().replace(/^#+/, "").slice(0, 24); if (!t) return;
+  if ((S.tags[id] || []).some(x => x.toLowerCase() === t.toLowerCase())) { i.value = ""; return toast("Already tagged"); }
+  i.value = ""; await toggleTag(id, t);
+}
+function paintTagChips() {
+  const el = $("#tagchips"); if (!el) return;
+  const set = [...new Set(Object.values(S.tags).flat())];
+  el.hidden = !set.length;
+  el.innerHTML = set.map(t => `<button class="chip ${S.tagF === t ? "on" : ""}" data-act="tagf" data-t="${esc(t)}">#${esc(t)}</button>`).join("");
+}
+async function copyMsg(id) {
+  const m = S.msgs.find(x => x.id === id); if (!m || !m.body) return;
+  try { await navigator.clipboard.writeText(m.body); toast("Copied"); } catch (e) { prompt("Copy this text:", m.body); }
+}
+function insertEmoji(e) {
+  const i = $("#mi"); if (!i) return;
+  const a = i.selectionStart == null ? i.value.length : i.selectionStart, b = i.selectionEnd == null ? a : i.selectionEnd;
+  i.value = i.value.slice(0, a) + e + i.value.slice(b);
+  try { const p = a + e.length; i.setSelectionRange(p, p); } catch (x) {}
+}
+
+/* ---------- STATUS (24-HOUR STORIES) ---------- */
+const BGS = ["#b3121f", "#7d0c19", "#1d3557", "#2a6f4f", "#6a2c91", "#c26a00"];
+const NOSQL = /does not exist|schema cache|relation/i;
+function viewStatus() {
+  return `<div class="row">${avatarHtml(S.user.id, S.me.display_name)}<div class="g"><div class="b">My status</div><div class="m">Photos and text disappear after 24 hours</div></div></div>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <label class="btn" style="flex:1;text-align:center;cursor:pointer">Add photo<input id="sfile" type="file" accept="image/*" hidden></label>
+      <button class="btn o" style="flex:1" type="button" data-act="textstatus">Add text</button></div>
+    <div id="stmine"></div>
+    <h2>Recent updates</h2><div id="stlist"><div class="empty">Loading…</div></div>`;
+}
+function bindStatus() {
+  const f = $("#sfile"); if (f) f.addEventListener("change", e => { const file = e.target.files[0]; e.target.value = ""; if (file) postPhotoStatus(file); });
+}
+async function loadStories() {
+  const [a, b] = await Promise.all([
+    sb.from("stories").select("id,owner_id,kind,caption,bg,created_at").order("created_at", {ascending: true}).limit(300),
+    sb.from("story_views").select("story_id").eq("viewer_id", S.user.id).limit(1000)
+  ]);
+  if (a.error) { S.stories = []; return paintStatus(NOSQL.test(a.error.message) ? "Status needs the Update 4 SQL in Supabase." : a.error.message); }
+  S.stories = a.data || []; S.seen = new Set((b.data || []).map(x => x.story_id));
+  const miss = [...new Set(S.stories.map(s => s.owner_id))].filter(u => !S.names[u]);
+  if (miss.length) {
+    const {data} = await sb.from("profiles").select("id,display_name,avatar_url").in("id", miss);
+    (data || []).forEach(p => { S.names[p.id] = p.display_name; S.avatars[p.id] = p.avatar_url || null; });
+  }
+  paintStatus();
+}
+function ringAv(uid, list, own) {
+  const unseen = !own && list.some(s => !S.seen.has(s.id));
+  return `<div class="ring ${unseen ? "new" : ""}">${avatarHtml(uid, S.names[uid])}</div>`;
+}
+function paintStatus(err) {
+  const el = $("#stlist"), mine = $("#stmine"); if (!el || !mine || S.tab !== "status") return;
+  const by = {}; S.stories.forEach(s => { (by[s.owner_id] = by[s.owner_id] || []).push(s); });
+  const my = by[S.user.id] || [];
+  mine.innerHTML = my.length ? `<button class="row" type="button" data-act="viewstory" data-u="${esc(S.user.id)}">${ringAv(S.user.id, my, true)}<div class="g"><div class="b">View my status</div><div class="m">${my.length} update${my.length > 1 ? "s" : ""} · ${esc(fmt(my[my.length - 1].created_at))}</div></div></button>` : "";
+  if (err) { el.innerHTML = `<div class="empty">${esc(err)}</div>`; return; }
+  const last = u => new Date(by[u][by[u].length - 1].created_at);
+  const others = Object.keys(by).filter(u => u !== S.user.id).sort((a, b) => last(b) - last(a));
+  el.innerHTML = others.length ? others.map(u => `<button class="row" type="button" data-act="viewstory" data-u="${esc(u)}">${ringAv(u, by[u])}<div class="g"><div class="b tr">${esc(S.names[u] || "Someone")}</div><div class="m">${esc(fmt(last(u)))}</div></div></button>`).join("")
+    : `<div class="empty"><b>No updates yet</b>When people you chat with post a status, it appears here.</div>`;
+}
+async function postStory(kind, media, caption, bg) {
+  const {error} = await sb.from("stories").insert({kind, media: media || null, caption: caption || null, bg: bg || null});
+  if (error) { toast(SQLHINT(error)); return false; }
+  toast("Status posted"); closeTextStatus(); loadStories(); return true;
+}
+async function postPhotoStatus(file) {
+  if (!file.type.startsWith("image/")) return toast("Choose a photo.");
+  try {
+    toast("Preparing photo…");
+    const blob = await compressImage(file, 900, 0.7);
+    const url = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(blob); });
+    const cap = prompt("Add a caption (optional)") || "";
+    await postStory("image", url, cap.trim().slice(0, 200));
+  } catch (e) { toast("Could not use that photo."); }
+}
+function openTextStatus() {
+  S.tsBg = BGS[0]; closeTextStatus();
+  const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.id = "tsbg"; bg.dataset.act = "tsbg";
+  bg.innerHTML = `<div class="sheet" role="dialog" aria-modal="true" aria-label="Text status">
+    <div class="tsprev" id="tsprev" style="background:${S.tsBg}"><textarea id="tst" maxlength="180" rows="4" placeholder="Type a status" aria-label="Status text"></textarea></div>
+    <div class="sw">${BGS.map(c => `<button type="button" class="swatch ${c === S.tsBg ? "on" : ""}" style="background:${c}" data-act="tsbgpick" data-c="${c}" aria-label="Background colour"></button>`).join("")}</div>
+    <div style="display:flex;gap:8px"><button class="btn o" style="flex:1" type="button" data-act="tsclose">Cancel</button><button class="btn" style="flex:1" type="button" data-act="tspost">Post</button></div></div>`;
+  document.body.appendChild(bg);
+  const t = $("#tst"); if (t) t.focus();
+}
+function closeTextStatus() { document.querySelectorAll("#tsbg").forEach(e => e.remove()); }
+const SMEDIA = {};
+function openStories(uid) {
+  const list = S.stories.filter(s => s.owner_id === uid); if (!list.length) return;
+  const first = uid === S.user.id ? 0 : Math.max(0, list.findIndex(s => !S.seen.has(s.id)));
+  S.sv = {uid, list, i: first, t: null};
+  paintStory();
+}
+async function paintStory() {
+  const sv = S.sv; if (!sv) return;
+  clearTimeout(sv.t);
+  const s = sv.list[sv.i], mine = sv.uid === S.user.id;
+  let ov = $("#sv"); if (!ov) { ov = document.createElement("div"); ov.id = "sv"; ov.className = "sv"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "Status"); document.body.appendChild(ov); }
+  ov.innerHTML = `<div class="svbars">${sv.list.map((_, k) => `<i class="${k < sv.i ? "d" : k === sv.i ? "c" : ""}"></i>`).join("")}</div>
+    <div class="svhead">${avatarHtml(sv.uid, S.names[sv.uid])}<div class="g"><div class="b tr">${esc(mine ? "My status" : (S.names[sv.uid] || "Someone"))}</div><div class="m">${esc(fmt(s.created_at))}</div></div>
+      ${mine ? `<button class="ib sm" type="button" data-act="svdel" aria-label="Delete this status">${ico("trash")}</button>` : ""}
+      <button class="ib sm" type="button" data-act="svclose" aria-label="Close">${ico("x")}</button></div>
+    <div class="svbody" ${s.kind === "text" ? `style="background:${esc(s.bg || "#b3121f")}"` : ""}>${s.kind === "text" ? `<div class="svtxt">${esc(s.caption || "")}</div>` : `<img id="svimg" alt="Status photo">`}</div>
+    ${s.kind === "image" && s.caption ? `<div class="svcap">${esc(s.caption)}</div>` : ""}
+    ${mine ? `<div class="svviews" id="svv">&nbsp;</div>` : ""}
+    <button class="svnav l" type="button" data-act="svprev" aria-label="Previous"></button><button class="svnav r" type="button" data-act="svnext" aria-label="Next"></button>`;
+  const stillHere = () => S.sv === sv && sv.list[sv.i] === s;
+  if (!mine && !S.seen.has(s.id)) { S.seen.add(s.id); sb.from("story_views").insert({story_id: s.id}).then(() => {}, () => {}); }
+  if (mine) sb.from("story_views").select("viewer_id", {count: "exact", head: true}).eq("story_id", s.id).then(r => { const v = $("#svv"); if (v && stillHere()) v.textContent = (r.count || 0) + " view" + (r.count === 1 ? "" : "s"); });
+  if (s.kind === "text") { sv.t = setTimeout(nextStory, 5000); return; }
+  if (!SMEDIA[s.id]) {
+    const {data, error} = await sb.from("stories").select("media").eq("id", s.id).single();
+    if (error || !data) { toast("Could not load this status."); return; }
+    SMEDIA[s.id] = data.media;
+  }
+  if (!stillHere()) return;
+  const img = $("#svimg"); if (img) img.src = SMEDIA[s.id];
+  sv.t = setTimeout(nextStory, 5000);
+}
+function nextStory() { const sv = S.sv; if (!sv) return; if (sv.i < sv.list.length - 1) { sv.i++; paintStory(); } else closeStories(); }
+function prevStory() { const sv = S.sv; if (!sv) return; if (sv.i > 0) { sv.i--; paintStory(); } }
+function closeStories() {
+  if (S.sv) clearTimeout(S.sv.t);
+  S.sv = null; document.querySelectorAll("#sv").forEach(e => e.remove());
+  paintStatus();
+}
+async function delStory() {
+  const sv = S.sv; if (!sv) return;
+  const s = sv.list[sv.i];
+  if (!confirm("Delete this status?")) return;
+  const {error} = await sb.from("stories").delete().eq("id", s.id);
+  if (error) return toast(error.message);
+  S.stories = S.stories.filter(x => x.id !== s.id);
+  sv.list.splice(sv.i, 1);
+  if (!sv.list.length) return closeStories();
+  if (sv.i >= sv.list.length) sv.i = sv.list.length - 1;
+  paintStory();
 }
 
 /* ---------- NEW CHAT / GROUP SHEET ---------- */
@@ -858,7 +1177,7 @@ function viewMe() {
   const me = S.me;
   const tg = (k, label, sub) => `<div class="row"><div class="g"><div class="b">${label}</div><div class="m">${sub}</div></div>
     <button class="tg ${me[k] ? "on" : ""}" role="switch" aria-checked="${!!me[k]}" aria-label="${label}" data-act="tog" data-k="${k}"></button></div>`;
-  return `<div class="row" style="align-items:center">${avatarHtml(S.user.id, me.display_name, "lg")}
+  return `<div class="row" style="align-items:center">${avatarHtml(S.user.id, me.display_name, "md")}
       <div class="g"><div class="b">Profile photo</div><div class="m">Shown to people you chat with.</div></div>
       <label class="chip" style="margin:0;cursor:pointer">Change<input id="avf" type="file" accept="image/*" hidden></label></div>
     <form class="form" id="pf" autocomplete="off">
@@ -912,19 +1231,26 @@ async function toggleSetting(k) {
 }
 
 /* ---------- SHELL ---------- */
-const TABS = [["chats", "Chats"], ["vault", "Vault"], ["memories", "Memories"], ["me", "Me"]];
+const TABS = [["chats", "Chats"], ["status", "Status"], ["vault", "Vault"], ["memories", "Memories"], ["me", "Me"]];
+const CFILTERS = [["all", "All"], ["dm", "Personal"], ["group", "Groups"]];
 function render() {
   if (!S.user) return renderAuth("in");
   if (S.open) return renderChat();
-  const title = S.tab === "chats" ? `<span class="brand">TREASURE</span>` : esc((TABS.find(t => t[0] === S.tab) || [])[1] || "");
-  const view = {chats: `<input class="search" id="cq" type="search" placeholder="Search chats" aria-label="Search chats" value="${esc(S.q)}"><div id="list"></div><button class="fab" data-act="newchat" aria-label="New chat">+</button>`, vault: viewVault(), memories: viewMems(), me: viewMe()}[S.tab];
+  const t0 = TABS.find(t => t[0] === S.tab) || [];
+  const title = S.tab === "chats" ? `<img class="logo" src="${LOGO}" alt="" width="24" height="28"><span class="brand">TREASURE</span>` : esc(t0[1] || "");
+  const chips = CFILTERS.map(f => `<button class="chip ${(S.cf || "all") === f[0] ? "on" : ""}" data-act="cfilter" data-f="${f[0]}">${f[1]}</button>`).join("");
+  const view = {
+    chats: `<input class="search" id="cq" type="search" placeholder="Search chats" aria-label="Search chats" value="${esc(S.q)}"><div class="chips">${chips}</div><div id="list"></div><button class="fab" data-act="newchat" aria-label="New chat">${ico("plus")}</button>`,
+    status: viewStatus(), vault: viewVault(), memories: viewMems(), me: viewMe()
+  }[S.tab];
   root.innerHTML = `<div class="app">
     <div class="top"><h1>${title}</h1></div>
     <div class="main" id="main">${view}</div>
-    <nav class="nav" aria-label="Main">${TABS.map(t => `<button class="${S.tab === t[0] ? "on" : ""}" data-act="tab" data-t="${t[0]}" ${t[0] === "chats" ? 'id="chatsTab"' : ""}>${t[1]}</button>`).join("")}</nav>
+    <nav class="nav" aria-label="Main">${TABS.map(t => `<button class="${S.tab === t[0] ? "on" : ""}" data-act="tab" data-t="${t[0]}" ${t[0] === "chats" ? 'id="chatsTab"' : ""}>${ico(t[0])}<span>${t[1]}</span>${t[0] === "chats" ? `<b class="badge navbadge" id="cbadge" hidden></b>` : ""}</button>`).join("")}</nav>
   </div>`;
   updateBadge();
   if (S.tab === "chats") paintConvs();
+  if (S.tab === "status") { bindStatus(); loadStories(); }
   if (S.tab === "vault") { bindVault(); paintVault(); loadVault(); }
   if (S.tab === "memories") { bindMems(); paintMems(); loadMems(); }
   if (S.tab === "me") bindMe();
@@ -934,15 +1260,15 @@ function render() {
 document.addEventListener("click", async e => {
   const el = e.target.closest("[data-act]"); if (!el) return;
   const d = el.dataset;
-  if (d.act === "sheetbg" && e.target !== el) return;
+  if (/bg$/.test(d.act) && e.target !== el) return;
   switch (d.act) {
     case "authmode": return renderAuth(d.mode);
     case "tab": S.tab = d.t; return render();
     case "open": return openConv(d.id);
-    case "back": stopRec(true); S.open = null; S.msgQ = null; render(); return refreshConvs();
+    case "back": stopRec(true); closeMenu(); S.open = null; S.msgQ = null; S.tagF = null; render(); return refreshConvs();
     case "legal": return openLegal(d.k);
     case "legalclose": case "legalbg": if (d.act === "legalbg" && e.target !== el) return; return closeLegal();
-    case "delmsg": return deleteMsg(d.id);
+    case "delmsg": closeMenu(); return deleteMsg(d.id);
     case "msgsearch": return toggleMsgSearch();
     case "sound": try { localStorage.setItem("tr_sound", soundOn() ? "off" : "on"); } catch (er) {} { const m = $("#main"); if (m) { m.innerHTML = viewMe(); bindMe(); } } return;
     case "delacct": return deleteAccount();
@@ -950,7 +1276,7 @@ document.addEventListener("click", async e => {
     case "recsend": return stopRec(false);
     case "reccancel": return stopRec(true);
     case "invite": return shareInvite();
-    case "savemsg": return saveMsgToVault(d.id);
+    case "savemsg": closeMenu(); return saveMsgToVault(d.id);
     case "newchat": return openSheet();
     case "sheetclose": case "sheetbg": return closeSheet();
     case "sheetmode": S.sheet.mode = d.mode; S.sheet.picked = new Set(); return paintSheet();
@@ -963,9 +1289,29 @@ document.addEventListener("click", async e => {
     case "tog": return toggleSetting(d.k);
     case "install": if (S.installEv) { S.installEv.prompt(); S.installEv = null; el.hidden = true; } return;
     case "signout": return signOut();
+    case "msgmenu": if (e.target.closest("a,audio,video")) return; return openMsgMenu(d.id);
+    case "mmbg": return closeMenu();
+    case "react": closeMenu(); return react(d.id, d.e);
+    case "tagtoggle": return toggleTag(d.id, d.t);
+    case "tagadd": return addTag(d.id);
+    case "tagf": S.tagF = S.tagF === d.t ? null : d.t; paintTagChips(); return paintMsgs();
+    case "copymsg": closeMenu(); return copyMsg(d.id);
+    case "emojitoggle": { const p = $("#emo"); if (p) p.hidden = !p.hidden; return; }
+    case "emo": return insertEmoji(d.e);
+    case "callsoon": return toast("Voice and video calls are coming soon.");
+    case "cfilter": S.cf = d.f; return render();
+    case "textstatus": return openTextStatus();
+    case "tsbg": case "tsclose": return closeTextStatus();
+    case "tsbgpick": { S.tsBg = d.c; const pv = $("#tsprev"); if (pv) pv.style.background = d.c; document.querySelectorAll(".swatch").forEach(x => x.classList.toggle("on", x.dataset.c === d.c)); return; }
+    case "tspost": { const t = $("#tst"), v = t ? t.value.trim() : ""; if (!v) return toast("Type something first."); return postStory("text", null, v, S.tsBg); }
+    case "viewstory": return openStories(d.u);
+    case "svclose": return closeStories();
+    case "svnext": return nextStory();
+    case "svprev": return prevStory();
+    case "svdel": return delStory();
   }
 });
-document.addEventListener("keydown", e => { if (e.key === "Escape") { if ($("#legalbg")) closeLegal(); else if (S.sheet) closeSheet(); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { if ($("#sv")) closeStories(); else if ($("#mmbg")) closeMenu(); else if ($("#tsbg")) closeTextStatus(); else if ($("#legalbg")) closeLegal(); else if (S.sheet) closeSheet(); } });
 document.addEventListener("input", e => {
   if (e.target.id === "cq") { S.q = e.target.value; paintConvs(); }
   else if (e.target.id === "msq") { S.msgQ = e.target.value; paintMsgs(); }
