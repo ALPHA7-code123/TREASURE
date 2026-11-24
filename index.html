@@ -173,6 +173,65 @@ svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stro
 .flash{animation:fl 1.1s}
 @keyframes fl{0%,60%{box-shadow:0 0 0 3px var(--red)}100%{box-shadow:none}}
 .rbar{display:flex;align-items:center;gap:8px;padding:8px max(14px,env(safe-area-inset-left,0px));border-top:1px solid var(--line);border-left:4px solid var(--red);background:var(--card)}
+:root{--card2:#1f1719;--out:#7d0f1f;--bubble-in:#241c1e;--wall:#0b0708}
+.top{background:#1a1214;border-bottom:0;padding:8px 6px 8px 14px;min-height:58px;gap:6px}
+.top .ib{border:0;background:none;width:38px;height:38px}
+.top .av{width:40px;height:40px;font-size:16px}
+.top .g .m{font-size:12px;line-height:1.1}
+.top .ib.dim{opacity:.4}
+.chips .chip{background:transparent;border-color:var(--line);color:var(--mute)}
+.chips .chip.on{background:rgba(196,24,43,.25);border-color:transparent;color:#ff9aa4}
+.main{padding-top:8px}
+#list .row{background:transparent;border:0;border-radius:0;box-shadow:none;margin:0;padding:10px 2px;border-bottom:1px solid rgba(255,255,255,.05);gap:14px}
+#list .av{width:52px;height:52px;font-size:20px}
+#list .row .b{font-size:16.5px}
+#list .row .m{font-size:13.5px}
+.hot{color:#ff6b7a!important;font-weight:600}
+.nav{background:#150f11;border-top:0}
+.nav button{padding:7px 0 6px}
+.nav .ni{width:56px;height:30px;border-radius:16px;display:grid;place-items:center}
+.nav button.on .ni{background:rgba(196,24,43,.3)}
+.nav button.on svg{color:#fff;filter:none}
+.fab{border-radius:16px;width:56px;height:56px}
+.app.chat{background-color:var(--wall);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.05' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='20' cy='22' r='6'/%3E%3Cpath d='M70 14l3 7 7 1-5 5 1 7-6-4-6 4 1-7-5-5 7-1z'/%3E%3Cpath d='M96 70c-4-6-12-2-8 4l8 8 8-8c4-6-4-10-8-4z'/%3E%3Crect x='18' y='74' width='14' height='10' rx='2'/%3E%3Cpath d='M60 92l8 8M68 92l-8 8'/%3E%3Ccircle cx='104' cy='28' r='2'/%3E%3Cpath d='M36 52c4-4 9-4 13 0'/%3E%3C/g%3E%3C/svg%3E");background-size:120px 120px}
+.app.chat .msgs{background:none;padding:8px 10px 10px;gap:0}
+.sep{background:#1d1517;color:#b9aeb0;padding:4px 12px;border-radius:8px;font-size:12px;margin:12px 0 8px;box-shadow:0 1px 1px rgba(0,0,0,.3)}
+.bub{border:0;padding:6px 9px 5px;border-radius:10px;font-size:15.5px;line-height:1.35;max-width:82%;box-shadow:0 1px 1px rgba(0,0,0,.35);margin-top:2px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.bub.first{margin-top:9px}
+.bub.me{background:var(--out);border:0}
+.bub:not(.me){background:var(--bubble-in)}
+.bub.first::before{content:"";position:absolute;top:0;width:9px;height:13px;background:inherit}
+.bub.first:not(.me)::before{left:-8px;clip-path:polygon(100% 0,100% 100%,0 0)}
+.bub.first.me::before{right:-8px;clip-path:polygon(0 0,100% 0,0 100%)}
+.bub.first:not(.me){border-top-left-radius:0}
+.bub.first.me{border-top-right-radius:0}
+.bub .line{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:flex-end;column-gap:10px}
+.bub .line .txt{flex:0 1 auto;min-width:0}
+.bub .meta{margin:0 0 0 auto;flex:none;font-size:11px;opacity:.75;display:flex;gap:3px;align-items:center;padding-top:2px;white-space:nowrap}
+.tick{width:16px;height:12px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.tick.rd{color:#5cc8ff}
+.bub.hasrx{margin-bottom:18px}
+.bub .rxs{position:absolute;right:8px;bottom:-14px;margin:0}
+.rx{background:#2b2224;border:1px solid var(--wall);padding:0 6px;font-size:12px}
+.composer{background:transparent;border-top:0;padding:6px 8px calc(8px + env(safe-area-inset-bottom,0px));align-items:flex-end;gap:6px}
+.composer .cw{flex:1;display:flex;align-items:center;background:var(--card2);border-radius:26px;padding:2px 4px;min-width:0}
+.composer .cw input{border:0;background:transparent;padding:11px 4px;flex:1;min-width:0;border-radius:0}
+.composer .cw input:focus-visible{outline:0}
+.composer .cw .ib{border:0;background:none;width:38px;height:38px}
+.sendb{flex:none;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#d11f33,#8f0f1e);border:0;color:#fff;display:grid;place-items:center;padding:0}
+.rbar,.emo{background:#1a1214}
+.mwrap{flex:1;min-height:0;display:flex;position:relative}
+.mwrap .msgs{flex:1;min-width:0}
+.tobot{position:absolute;right:12px;bottom:10px;width:42px;height:42px;border-radius:50%;border:0;background:var(--card2);color:var(--ink);display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.45);padding:0;z-index:2}
+.top .g .m.typ{color:#ff8a96;font-weight:600}.top .g .m.onl{color:#7be0a6}
+.typing-t{color:#ff8a96!important;font-weight:600}
+.vn{display:flex;align-items:center;gap:10px;min-width:220px;padding:2px 0}
+.vp{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:inherit;display:grid;place-items:center;padding:0}
+.vp svg{width:20px;height:20px;fill:currentColor}
+.vw{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.vbar{height:4px;border-radius:2px;background:rgba(255,255,255,.28);position:relative;overflow:hidden}
+.vbar i{position:absolute;left:0;top:0;bottom:0;width:0;background:#fff}
+.vt{font-size:11px;opacity:.8}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -211,7 +270,9 @@ const IC = {
   me: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   x: '<path d="M18 6L6 18M6 6l12 12"/>',
-  trash: '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>'
+  trash: '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
+  down: '<path d="M6 9l6 6 6-6"/>',
+  camera: '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>'
 };
 const ico = n => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ""}</svg>`;
 const SQLHINT = e => /does not exist|schema cache|relation/i.test((e && e.message) || "") ? "Run the Update 4 SQL in Supabase first." : ((e && e.message) || "Something went wrong");
@@ -220,7 +281,7 @@ const S = {
   user: null, me: null, tab: "chats",
   convs: [], names: {}, open: null, msgs: [],
   vault: [], vcat: "All", mems: [], channel: null, installEv: null, sheet: null,
-  avatars: {}, q: "", msgQ: null, cf: "all", replyTo: null, noClick: 0, reacts: {}, tags: {}, tagF: null, mm: null, stories: [], seen: new Set(), sv: null, tsBg: null, channel2: null
+  avatars: {}, q: "", msgQ: null, cf: "all", online: new Set(), typing: {}, channel3: null, lastTyping: 0, readMin: {}, lastPT: "", replyTo: null, noClick: 0, reacts: {}, tags: {}, tagF: null, mm: null, stories: [], seen: new Set(), sv: null, tsBg: null, channel2: null
 };
 const root = $("#root");
 
@@ -303,7 +364,7 @@ async function shareInvite() {
 const LEGAL_DOCS = {
   privacy: {title: "Privacy Policy", body: [
     ["Who we are", `${LEGAL.company} ("we") runs the TREASURE messaging app. Questions about your data: ${LEGAL.email}.`],
-    ["What we collect", "Your email address, name, optional profile photo and about line; the messages, photos, voice notes and files you send; items you save in your Vault and Memories; and basic technical data needed to run the app."],
+    ["What we collect", "Your email address, name, optional profile photo and about line; the messages, photos, voice notes and files you send; items you save in your Vault and Memories; your online and typing status while the app is open, and basic technical data needed to run the app."],
     ["Why we use it", "To create your account, deliver your messages, keep your Vault and Memories, keep the service secure, and fix problems. We do not sell your data and we do not show ads."],
     ["Treasure AI", "AI features are off by default. If AI features are added, they will only read your messages or Vault when you switch the matching setting on, and you can switch it off at any time."],
     ["Encryption", "Data is encrypted while it travels between your phone and our servers. Messages are stored on our servers and are not yet end-to-end encrypted. We will not read your private messages unless needed to keep the service secure or required by law."],
@@ -442,19 +503,25 @@ function startRealtime() {
     .on("postgres_changes", {event: "INSERT", schema: "public", table: "messages"}, p => onNewMessage(p.new))
     .on("postgres_changes", {event: "UPDATE", schema: "public", table: "messages"}, p => onMsgUpdate(p.new))
     .on("postgres_changes", {event: "INSERT", schema: "public", table: "conversation_members"}, () => refreshConvsSoon())
+    .on("postgres_changes", {event: "UPDATE", schema: "public", table: "conversation_members"}, () => refreshConvsSoon())
     .subscribe();
   S.channel2 = sb.channel("treasure-react")
     .on("postgres_changes", {event: "*", schema: "public", table: "message_reactions"}, () => { if (S.open) loadMetaSoon(); })
     .subscribe();
+  startPresence();
 }
 function stopRealtime() {
   if (S.channel) { sb.removeChannel(S.channel); S.channel = null; }
   if (S.channel2) { sb.removeChannel(S.channel2); S.channel2 = null; }
+  if (S.channel3) { try { sb.removeChannel(S.channel3); } catch (e) {} S.channel3 = null; }
+  S.online = new Set();
 }
 let rcTimer;
 function refreshConvsSoon() { clearTimeout(rcTimer); rcTimer = setTimeout(refreshConvs, 250); }
 function onNewMessage(m) {
+  delete S.typing[m.conversation_id + ":" + m.sender_id];
   const here = S.open && m.conversation_id === S.open.id;
+  if (here) paintHeaderSub();
   if (here) {
     addMsg(m);
     if (m.sender_id !== S.user.id && !document.hidden) markRead(m.conversation_id);
@@ -530,13 +597,16 @@ async function refreshConvs() {
   const ids = mem.map(m => m.conversation_id);
   if (!ids.length) { S.convs = []; paintConvs(); return; }
   const [a, b, c] = await Promise.all([
-    sb.from("conversation_members").select("conversation_id,user_id,profiles(display_name,avatar_url)").in("conversation_id", ids),
+    sb.from("conversation_members").select("conversation_id,user_id,last_read_at,profiles(display_name,avatar_url)").in("conversation_id", ids),
     sb.from("messages").select("id,conversation_id,sender_id,body,media_type,created_at,deleted_at").in("conversation_id", ids).order("created_at", {ascending: false}).limit(300),
     sb.rpc("unread_counts")
   ]);
   const members = a.data || [], msgs = b.data || [], unread = {};
   (c.data || []).forEach(r => { unread[r.conversation_id] = Number(r.unread) || 0; });
   members.forEach(r => { if (r.profiles) { S.names[r.user_id] = r.profiles.display_name; S.avatars[r.user_id] = r.profiles.avatar_url || null; } });
+  const prevRead = S.readMin; S.readMin = {};
+  ids.forEach(cid => { const o = members.filter(x => x.conversation_id === cid && x.user_id !== S.user.id); if (o.length) S.readMin[cid] = Math.min(...o.map(x => new Date(x.last_read_at).getTime())); });
+  if (S.open && prevRead[S.open.id] !== S.readMin[S.open.id]) paintMsgs();
   const lastBy = {};
   msgs.forEach(m => { if (!lastBy[m.conversation_id]) lastBy[m.conversation_id] = m; });
   S.convs = mem.map(m => {
@@ -561,13 +631,13 @@ function paintConvs() {
     return;
   }
   const q = (S.q || "").trim().toLowerCase(), f = S.cf || "all";
-  const list = S.convs.filter(c => (f === "all" || (f === "group") === !!c.is_group) && (!q || c.title.toLowerCase().includes(q) || c.preview.toLowerCase().includes(q)));
+  const list = S.convs.filter(c => (f === "all" || (f === "unread" ? c.unread > 0 : !!c.is_group)) && (!q || c.title.toLowerCase().includes(q) || c.preview.toLowerCase().includes(q)));
   if (!list.length) { el.innerHTML = `<div class="empty"><b>No chats here</b>Try a different filter, name or word.</div>`; return; }
   el.innerHTML = list.map(c => `
     <button class="row" data-act="open" data-id="${esc(c.id)}">
       ${avatarHtml(c.uid, c.title)}
-      <div class="g"><div class="b tr">${esc(c.title)}</div><div class="m tr ${c.unread ? "un" : ""}">${esc(c.preview)}</div></div>
-      <div class="side"><div class="m">${esc(fmt(c.time))}</div>${c.unread ? `<span class="badge">${c.unread}</span>` : ""}</div>
+      <div class="g"><div class="b tr">${esc(c.title)}</div><div class="m tr ${typingIn(c.id).length ? "typing-t" : c.unread ? "un" : ""}">${typingIn(c.id).length ? "typing…" : esc(c.preview)}</div></div>
+      <div class="side"><div class="m ${c.unread ? "hot" : ""}">${esc(fmt(c.time))}</div>${c.unread ? `<span class="badge">${c.unread}</span>` : ""}</div>
     </button>`).join("");
 }
 
@@ -587,31 +657,43 @@ const EMOJI = [
   ["Hearts and fun", "❤️🧡💛💚💙💜🖤🤍💔💯🔥✨⭐🎉🎊🎁🏆👑💎💰"],
   ["Everyday", "🍚🍗🍕🍔🍺🥂☕🚗✈️🏠📱💻📷🎵⚽🇳🇬"]
 ];
+function syncSend() {
+  const i = $("#mi"), b = $("#sb"); if (!i || !b) return;
+  const has = !!i.value.trim();
+  b.type = has ? "submit" : "button";
+  if (has) { delete b.dataset.act; b.setAttribute("aria-label", "Send"); } else { b.dataset.act = "mic"; b.setAttribute("aria-label", "Record a voice note"); }
+  b.innerHTML = ico(has ? "send" : "mic");
+}
 function renderChat() {
   const c = S.open;
   root.innerHTML = `
-  <div class="app">
-    <div class="top"><button class="ib sm" data-act="back" aria-label="Back to chats">${ico("back")}</button>
+  <div class="app chat">
+    <div class="top"><button class="ib" data-act="back" aria-label="Back to chats">${ico("back")}</button>
       ${avatarHtml(c.uid, c.title)}
-      <div class="g"><h1 class="tr">${esc(c.title)}</h1>${c.is_group ? `<div class="m">Group chat</div>` : ""}</div>
-      <button class="ib sm dim" data-act="callsoon" aria-label="Voice call (coming soon)">${ico("phone")}</button>
-      <button class="ib sm dim" data-act="callsoon" aria-label="Video call (coming soon)">${ico("video")}</button>
-      <button class="ib sm" data-act="msgsearch" aria-label="Search in this chat">${ico("search")}</button></div>
+      <div class="g"><h1 class="tr">${esc(c.title)}</h1><div class="m tr" id="hsub"></div></div>
+      <button class="ib dim" data-act="callsoon" aria-label="Video call (coming soon)">${ico("video")}</button>
+      <button class="ib dim" data-act="callsoon" aria-label="Voice call (coming soon)">${ico("phone")}</button>
+      <button class="ib" data-act="msgsearch" aria-label="Search in this chat">${ico("search")}</button></div>
     <div class="chatbar" id="chatbar" hidden>
       <div class="cbrow"><input id="msq" type="search" placeholder="Search words or tags" aria-label="Search this chat"><button class="chip ic" data-act="msgsearch" style="margin:0">Close</button></div>
       <div class="chips" id="tagchips" style="margin:8px 0 0" hidden></div></div>
-    <div class="msgs" id="msgs" aria-live="polite"></div>
+    <div class="mwrap"><div class="msgs" id="msgs" aria-live="polite"></div><button class="tobot" id="tobot" type="button" data-act="tobot" aria-label="Scroll to latest message" hidden>${ico("down")}</button></div>
     <div class="rbar" id="rbar" hidden></div>
     <div class="emo" id="emo" hidden>${EMOJI.map(g => `<h3>${esc(g[0])}</h3><div class="eg">${[...g[1].matchAll(/\p{Extended_Pictographic}️?|\p{Regional_Indicator}{2}/gu)].map(m => `<button type="button" data-act="emo" data-e="${m[0]}" aria-label="Emoji ${m[0]}">${m[0]}</button>`).join("")}</div>`).join("")}</div>
     <form class="composer" id="cf" autocomplete="off">
-      <label class="ib" aria-label="Attach a photo, video or file" title="Attach">
-        <svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC.clip}</svg>
-        <input id="fi" type="file" hidden accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv">
-      </label>
-      <button class="ib" type="button" data-act="emojitoggle" aria-label="Emoji" title="Emoji">${ico("smile")}</button>
-      <input id="mi" placeholder="Write a message…" aria-label="Message" enterkeyhint="send">
-      <button class="ib" type="button" data-act="mic" aria-label="Record a voice note" title="Voice note">${ico("mic")}</button>
-      <button class="ib send" type="submit" aria-label="Send">${ico("send")}</button>
+      <div class="cw">
+        <button class="ib" type="button" data-act="emojitoggle" aria-label="Emoji" title="Emoji">${ico("smile")}</button>
+        <input id="mi" placeholder="Message" aria-label="Message" enterkeyhint="send">
+        <label class="ib" aria-label="Attach a photo, video or file" title="Attach">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true">${IC.clip}</svg>
+          <input id="fi" type="file" hidden accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv">
+        </label>
+        <label class="ib" aria-label="Take a photo" title="Camera">
+          ${ico("camera")}
+          <input id="ci" type="file" hidden accept="image/*" capture="environment">
+        </label>
+      </div>
+      <button class="sendb" id="sb" type="button" data-act="mic" aria-label="Record a voice note">${ico("mic")}</button>
     </form>
     <div class="rec" id="rec" hidden>
       <span class="dot" aria-hidden="true"></span><span class="g">Recording <span id="rt">0:00</span></span>
@@ -619,20 +701,21 @@ function renderChat() {
       <button class="btn s" type="button" data-act="recsend">Send</button>
     </div>
   </div>`;
+  $("#mi").addEventListener("input", syncSend);
   $("#cf").addEventListener("submit", async ev => {
     ev.preventDefault();
     const i = $("#mi"), text = i.value;
     if (!text.trim()) return;
-    i.value = ""; i.focus();
+    i.value = ""; syncSend(); i.focus();
     const ok = await sendMsg(text);
-    if (!ok) i.value = text;
+    if (!ok) { i.value = text; syncSend(); }
   });
-  $("#fi").addEventListener("change", async ev => {
+  ["#fi", "#ci"].forEach(sel => $(sel).addEventListener("change", async ev => {
     const f = ev.target.files[0]; ev.target.value = "";
     if (f) await sendFile(f);
-  });
-  bindSwipe();
-  paintMsgs();
+  }));
+  bindSwipe(); bindScroll();
+  paintMsgs(); paintHeaderSub();
 }
 
 /* ---------- PHOTOS, FILES, VOICE NOTES ---------- */
@@ -649,7 +732,7 @@ function mediaHtml(m) {
   if (!m.media_path || m.deleted_at) return "";
   const p = esc(m.media_path), u = (URLS[m.media_path] || {}).url, src = u ? ` src="${esc(u)}"` : "", href = u ? ` href="${esc(u)}"` : "";
   if (m.media_type === "image") return `<a data-path="${p}"${href} target="_blank" rel="noopener"><img data-path="${p}"${src} alt="Photo"></a>`;
-  if (m.media_type === "voice") return `<audio controls preload="none" data-path="${p}"${src}></audio>`;
+  if (m.media_type === "voice") return `<div class="vn"><button type="button" class="vp" data-act="vnplay" aria-label="Play voice note">${PLAYI}</button><div class="vw"><div class="vbar"><i></i></div><span class="vt">Voice note</span></div><audio preload="metadata" data-path="${p}"${src} hidden></audio></div>`;
   if (m.media_type === "video") return `<video controls playsinline preload="metadata" data-path="${p}"${src}></video>`;
   const name = esc(m.media_path.split("/").pop().replace(/^\d+-/, ""));
   return `<a class="file" data-path="${p}"${href} target="_blank" rel="noopener">Open file: ${name}</a>`;
@@ -744,34 +827,40 @@ function addMsg(m) {
   if (S.msgs.some(x => x.id === m.id)) return;
   S.msgs.push(m); paintMsgs();
 }
+const TICK1 = '<svg class="tick" viewBox="0 0 24 16" aria-label="Sent"><path d="M4 8.5l5 5L20 2.5"/></svg>';
+const TICK2 = '<svg class="tick rd" viewBox="0 0 24 16" aria-label="Read"><path d="M1.5 8.5l5 5L17 2.5"/><path d="M10 11.5l2 2L23 2.5"/></svg>';
 function paintMsgs() {
   const el = $("#msgs"); if (!el || !S.open) return;
   const near = el.scrollHeight - el.scrollTop - el.clientHeight < 140;
-  let html = "", lastDay = "";
+  let html = "", lastDay = "", lastSender = "";
   const sq = (S.msgQ || "").trim().toLowerCase(), tf = S.tagF;
   const tagsOf = m => S.tags[m.id] || [];
   const shown = (sq || tf) ? S.msgs.filter(m => !m.deleted_at
     && (!sq || (m.body || "").toLowerCase().includes(sq) || tagsOf(m).some(t => t.toLowerCase().includes(sq)))
     && (!tf || tagsOf(m).includes(tf))) : S.msgs;
+  const readAt = S.readMin[S.open.id];
   shown.forEach(m => {
     const d = new Date(m.created_at).toDateString();
-    if (d !== lastDay) { html += `<div class="sep">${esc(dayLabel(m.created_at))}</div>`; lastDay = d; }
+    let first = m.sender_id !== lastSender;
+    if (d !== lastDay) { html += `<div class="sep">${esc(dayLabel(m.created_at))}</div>`; lastDay = d; first = true; }
+    lastSender = m.sender_id;
     const mine = m.sender_id === S.user.id;
     const text = m.deleted_at ? "Message deleted" : (m.body || "");
     const id = esc(m.id);
     const groups = {};
     (S.reacts[m.id] || []).forEach(r => { (groups[r.emoji] = groups[r.emoji] || []).push(r.user_id); });
-    const rxHtml = Object.keys(groups).length ? `<div class="rxs">${Object.keys(groups).map(e => `<button type="button" class="rx ${groups[e].includes(S.user.id) ? "on" : ""}" data-act="react" data-id="${id}" data-e="${esc(e)}">${esc(e)}${groups[e].length > 1 ? " " + groups[e].length : ""}</button>`).join("")}</div>` : "";
+    const hasRx = Object.keys(groups).length > 0;
+    const rxHtml = hasRx ? `<div class="rxs">${Object.keys(groups).map(e => `<button type="button" class="rx ${groups[e].includes(S.user.id) ? "on" : ""}" data-act="react" data-id="${id}" data-e="${esc(e)}">${esc(e)}${groups[e].length > 1 ? " " + groups[e].length : ""}</button>`).join("")}</div>` : "";
     const tg = tagsOf(m);
     const tgHtml = tg.length ? `<div class="tgs">${tg.map(t => `<span class="tagc">#${esc(t)}</span>`).join("")}</div>` : "";
-    html += `<div class="bub ${mine ? "me" : ""}" data-mid="${id}" ${m.deleted_at ? "" : `data-act="msgmenu" data-id="${id}"`}>
-      ${!mine && S.open.is_group ? `<div class="who">${esc(S.names[m.sender_id] || "Someone")}</div>` : ""}
+    const read = readAt != null && new Date(m.created_at).getTime() <= readAt;
+    const time = new Date(m.created_at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+    html += `<div class="bub ${mine ? "me" : ""} ${first ? "first" : ""} ${hasRx ? "hasrx" : ""}" data-mid="${id}" ${m.deleted_at ? "" : `data-act="msgmenu" data-id="${id}"`}>
+      ${!mine && S.open.is_group && first ? `<div class="who">${esc(S.names[m.sender_id] || "Someone")}</div>` : ""}
       ${quoteHtml(m)}
       ${mediaHtml(m)}
-      ${text ? `<div class="txt" ${m.deleted_at ? 'style="font-style:italic;opacity:.7"' : ""}>${esc(text)}</div>` : ""}
-      ${tgHtml}${rxHtml}
-      <div class="meta"><span>${esc(new Date(m.created_at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}))}</span>
-      ${m.deleted_at ? "" : `<button type="button" class="mm" data-act="msgmenu" data-id="${id}" aria-label="Message options: react, tag, save">⋯</button>`}</div></div>`;
+      <div class="line">${text ? `<div class="txt" ${m.deleted_at ? 'style="font-style:italic;opacity:.7"' : ""}>${esc(text)}</div>` : ""}<div class="meta"><span>${esc(time)}</span>${mine && !m.deleted_at ? (read ? TICK2 : TICK1) : ""}</div></div>
+      ${tgHtml}${rxHtml}</div>`;
   });
   S.stick = near || el.dataset.first !== "1";
   el.innerHTML = html || ((sq || tf)
@@ -893,6 +982,7 @@ function insertEmoji(e) {
   const a = i.selectionStart == null ? i.value.length : i.selectionStart, b = i.selectionEnd == null ? a : i.selectionEnd;
   i.value = i.value.slice(0, a) + e + i.value.slice(b);
   try { const p = a + e.length; i.setSelectionRange(p, p); } catch (x) {}
+  i.dispatchEvent(new Event("input", {bubbles: true}));
 }
 
 /* ---------- REPLIES (SWIPE A MESSAGE, OR TAP IT AND CHOOSE REPLY) ---------- */
@@ -915,27 +1005,85 @@ function paintReplyBar() {
   el.hidden = !m;
   el.innerHTML = m ? `<div class="g"><div class="b">Replying to ${esc(whoName(m))}</div><div class="m tr">${esc(snip(m))}</div></div><button class="ib sm" type="button" data-act="replyx" aria-label="Cancel reply">${ico("x")}</button>` : "";
 }
-const SW = {el: null, x: 0, y: 0, dx: 0, mode: null, id: null};
+const SW = {el: null, x: 0, y: 0, dx: 0, mode: null, id: null, lp: null};
 function bindSwipe() {
   const box = $("#msgs"); if (!box) return;
+  const reset = () => { clearTimeout(SW.lp); if (SW.el) { SW.el.style.transition = "transform .18s"; SW.el.style.transform = ""; } SW.el = null; };
   box.addEventListener("pointerdown", e => {
     if (e.pointerType === "mouse") return;
-    const b = e.target.closest(".bub[data-mid]"); if (!b || e.target.closest("audio,video,input")) return;
+    const b = e.target.closest(".bub[data-mid]"); if (!b || e.target.closest("audio,video,input,.rx,.vp")) return;
     SW.el = b; SW.x = e.clientX; SW.y = e.clientY; SW.dx = 0; SW.mode = null; SW.id = b.dataset.mid;
+    clearTimeout(SW.lp);
+    SW.lp = setTimeout(() => {
+      if (SW.el && !SW.mode && b.dataset.act === "msgmenu") { S.noClick = Date.now(); const id = SW.id; reset(); try { if (navigator.vibrate) navigator.vibrate(20); } catch (x) {} openMsgMenu(id); }
+    }, 450);
   });
   box.addEventListener("pointermove", e => {
     if (!SW.el) return;
     const dx = e.clientX - SW.x, dy = e.clientY - SW.y;
-    if (!SW.mode) { if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy) * 1.5) SW.mode = "h"; else if (Math.abs(dy) > 10) SW.mode = "v"; }
+    if (!SW.mode) {
+      if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy) * 1.5) { SW.mode = "h"; clearTimeout(SW.lp); }
+      else if (Math.abs(dy) > 10) { SW.mode = "v"; clearTimeout(SW.lp); }
+    }
     if (SW.mode === "h") { SW.dx = Math.max(-56, Math.min(56, dx)); SW.el.style.transition = "none"; SW.el.style.transform = "translateX(" + SW.dx + "px)"; }
   });
   const end = () => {
     if (!SW.el) return;
-    SW.el.style.transition = "transform .18s"; SW.el.style.transform = "";
-    if (SW.mode === "h") { S.noClick = Date.now(); if (Math.abs(SW.dx) >= 40) startReply(SW.id); }
-    SW.el = null;
+    const wasH = SW.mode === "h", dx = SW.dx, id = SW.id;
+    reset();
+    if (wasH) { S.noClick = Date.now(); if (Math.abs(dx) >= 40) startReply(id); }
   };
   box.addEventListener("pointerup", end); box.addEventListener("pointercancel", end);
+  box.addEventListener("contextmenu", e => { if (e.target.closest(".bub[data-mid]") && S.lastPT !== "mouse") e.preventDefault(); });
+}
+
+/* ---------- VOICE NOTE PLAYER ---------- */
+const PLAYI = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+const PAUSEI = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
+const fmtT = t => Math.floor(t / 60) + ":" + String(Math.floor(t % 60)).padStart(2, "0");
+["play", "pause", "ended", "timeupdate", "loadedmetadata"].forEach(t => document.addEventListener(t, e => {
+  const a = e.target; if (!a || a.tagName !== "AUDIO") return;
+  const w = a.closest(".vn"); if (!w) return;
+  const playing = !a.paused && !a.ended, d = isFinite(a.duration) ? a.duration : 0;
+  w.querySelector(".vp").innerHTML = playing ? PAUSEI : PLAYI;
+  w.querySelector(".vbar i").style.width = d && !a.ended ? (a.currentTime / d * 100) + "%" : "0";
+  w.querySelector(".vt").textContent = playing || (a.currentTime > 0 && !a.ended) ? fmtT(a.currentTime) : (d ? fmtT(d) : "Voice note");
+}, true));
+
+/* ---------- ONLINE, TYPING, SCROLL BUTTON ---------- */
+function startPresence() {
+  try {
+    const ch = sb.channel("treasure-presence", {config: {presence: {key: S.user.id}}});
+    S.channel3 = ch;
+    ch.on("presence", {event: "sync"}, () => { S.online = new Set(Object.keys(ch.presenceState())); paintHeaderSub(); })
+      .on("broadcast", {event: "typing"}, m => onTyping(m && m.payload))
+      .subscribe(st => { if (st === "SUBSCRIBED") ch.track({at: Date.now()}); });
+  } catch (e) { /* the app works without online status */ }
+}
+function sendTyping() {
+  if (!S.channel3 || !S.open) return;
+  const now = Date.now(); if (now - S.lastTyping < 2500) return; S.lastTyping = now;
+  try { S.channel3.send({type: "broadcast", event: "typing", payload: {c: S.open.id, u: S.user.id}}); } catch (e) {}
+}
+const typingIn = c => Object.keys(S.typing).filter(k => k.startsWith(c + ":") && Date.now() - S.typing[k] < 3200).map(k => k.split(":")[1]);
+function onTyping(p) {
+  if (!p || !p.c || p.u === S.user.id) return;
+  S.typing[p.c + ":" + p.u] = Date.now();
+  paintHeaderSub(); paintConvs();
+  setTimeout(() => { paintHeaderSub(); paintConvs(); }, 3300);
+}
+function paintHeaderSub() {
+  const el = $("#hsub"); if (!el || !S.open) return;
+  const t = typingIn(S.open.id);
+  let txt = "", cls = "";
+  if (t.length) { txt = S.open.is_group ? (S.names[t[0]] || "Someone") + " is typing…" : "typing…"; cls = "typ"; }
+  else if (S.open.is_group) txt = "Group chat";
+  else if (S.open.uid && S.online.has(S.open.uid)) { txt = "online"; cls = "onl"; }
+  el.textContent = txt; el.className = "m tr " + cls;
+}
+function bindScroll() {
+  const box = $("#msgs"); if (!box) return;
+  box.addEventListener("scroll", () => { const b = $("#tobot"); if (b) b.hidden = box.scrollHeight - box.scrollTop - box.clientHeight < 220; }, {passive: true});
 }
 
 /* ---------- STATUS (24-HOUR STORIES) ---------- */
@@ -1288,7 +1436,7 @@ async function toggleSetting(k) {
 
 /* ---------- SHELL ---------- */
 const TABS = [["chats", "Chats"], ["status", "Status"], ["vault", "Vault"], ["memories", "Memories"], ["me", "Me"]];
-const CFILTERS = [["all", "All"], ["dm", "Personal"], ["group", "Groups"]];
+const CFILTERS = [["all", "All"], ["unread", "Unread"], ["group", "Groups"]];
 function render() {
   if (!S.user) return renderAuth("in");
   if (S.open) return renderChat();
@@ -1302,7 +1450,7 @@ function render() {
   root.innerHTML = `<div class="app">
     <div class="top"><h1>${title}</h1></div>
     <div class="main" id="main">${view}</div>
-    <nav class="nav" aria-label="Main">${TABS.map(t => `<button class="${S.tab === t[0] ? "on" : ""}" data-act="tab" data-t="${t[0]}" ${t[0] === "chats" ? 'id="chatsTab"' : ""}>${ico(t[0])}<span>${t[1]}</span>${t[0] === "chats" ? `<b class="badge navbadge" id="cbadge" hidden></b>` : ""}</button>`).join("")}</nav>
+    <nav class="nav" aria-label="Main">${TABS.map(t => `<button class="${S.tab === t[0] ? "on" : ""}" data-act="tab" data-t="${t[0]}" ${t[0] === "chats" ? 'id="chatsTab"' : ""}><span class="ni">${ico(t[0])}</span><span>${t[1]}</span>${t[0] === "chats" ? `<b class="badge navbadge" id="cbadge" hidden></b>` : ""}</button>`).join("")}</nav>
   </div>`;
   updateBadge();
   if (S.tab === "chats") paintConvs();
@@ -1345,8 +1493,15 @@ document.addEventListener("click", async e => {
     case "tog": return toggleSetting(d.k);
     case "install": if (S.installEv) { S.installEv.prompt(); S.installEv = null; el.hidden = true; } return;
     case "signout": return signOut();
-    case "msgmenu": if (Date.now() - S.noClick < 400 || e.target.closest("a,audio,video")) return; return openMsgMenu(d.id);
+    case "msgmenu": if (S.lastPT === "touch" || S.lastPT === "pen" || Date.now() - S.noClick < 400 || e.target.closest("a,audio,video")) return; return openMsgMenu(d.id);
     case "mmbg": return closeMenu();
+    case "tobot": { const b = $("#msgs"); if (b) b.scrollTo({top: b.scrollHeight, behavior: "smooth"}); return; }
+    case "vnplay": {
+      const a = el.closest(".vn").querySelector("audio");
+      if (!a.getAttribute("src")) return toast("Loading voice note…");
+      if (a.paused) { document.querySelectorAll(".vn audio").forEach(x => { if (x !== a) x.pause(); }); a.play().catch(() => toast("Could not play this voice note on this phone.")); } else a.pause();
+      return;
+    }
     case "replymsg": closeMenu(); return startReply(d.id);
     case "replyx": S.replyTo = null; return paintReplyBar();
     case "jump": { const t = document.querySelector('.bub[data-mid="' + CSS.escape(d.id) + '"]'); if (t) { t.scrollIntoView({block: "center", behavior: "smooth"}); t.classList.add("flash"); setTimeout(() => t.classList.remove("flash"), 1200); } else toast("That message is further back in the chat."); return; }
@@ -1370,10 +1525,12 @@ document.addEventListener("click", async e => {
     case "svdel": return delStory();
   }
 });
+document.addEventListener("pointerdown", e => { S.lastPT = e.pointerType; }, true);
 document.addEventListener("keydown", e => { if (e.key === "Escape") { if ($("#sv")) closeStories(); else if ($("#mmbg")) closeMenu(); else if ($("#tsbg")) closeTextStatus(); else if ($("#legalbg")) closeLegal(); else if (S.sheet) closeSheet(); } });
 document.addEventListener("input", e => {
   if (e.target.id === "cq") { S.q = e.target.value; paintConvs(); }
   else if (e.target.id === "msq") { S.msgQ = e.target.value; paintMsgs(); }
+  else if (e.target.id === "mi") sendTyping();
 });
 
 /* ---------- START ---------- */
