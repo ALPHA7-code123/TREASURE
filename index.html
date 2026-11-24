@@ -103,6 +103,16 @@ label.f{display:block;font-size:13px;color:var(--mute);margin:12px 0 4px}
 .tg:after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}
 .tg.on{background:var(--red)}.tg.on:after{left:21px}
 h2{font-size:15px;margin:20px 0 8px}
+.auth .fine{font-size:12px;opacity:.8;text-align:center;margin:14px 0 0}
+.auth .fine button{background:none;border:0;color:#fff;text-decoration:underline;padding:0;font-size:12px}
+.legal h2{font-size:15px;margin:16px 0 4px}.legal p{margin:0;color:var(--mute)}
+.av{overflow:hidden}.av img{width:100%;height:100%;object-fit:cover;display:block}
+.av.lg{width:84px;height:84px;font-size:32px;margin:0 auto 8px}
+.search{margin-bottom:10px}
+.chatbar{display:flex;gap:8px;align-items:center;padding:8px max(14px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);background:var(--card)}
+.chatbar input{flex:1}
+.tabbadge{display:inline-block;margin-left:6px;vertical-align:middle}
+.danger{color:#c4202d;border-color:#c4202d}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -115,7 +125,11 @@ h2{font-size:15px;margin:20px 0 8px}
 const SUPABASE_URL = "https://weggrwxuzqlqcdqssmjj.supabase.co";
 const SUPABASE_KEY = "sb_publishable_j_gD6VhTXwaVIA7HEArdwA_Cvnp4tGo"; // publishable key: safe in the browser, data is protected by row-level security
 
+// Fill these in before public launch. They appear in the Privacy Policy and Terms.
+const LEGAL = {company: "TREASURE", email: "support@example.com", updated: "23 November 2026"};
+
 /* ---------- SETUP ---------- */
+const RECOVERY = /type=recovery/.test(location.hash);   // true when opened from a password-reset email
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const $ = s => document.querySelector(s);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -123,7 +137,8 @@ const initial = n => (String(n || "?").trim()[0] || "?").toUpperCase();
 const S = {
   user: null, me: null, tab: "chats",
   convs: [], names: {}, open: null, msgs: [],
-  vault: [], vcat: "All", mems: [], channel: null, installEv: null, sheet: null
+  vault: [], vcat: "All", mems: [], channel: null, installEv: null, sheet: null,
+  avatars: {}, q: "", msgQ: null
 };
 const root = $("#root");
 
@@ -191,25 +206,96 @@ async function shareInvite() {
   catch (e) { prompt("Copy your invite link:", link); }
 }
 
+/* ---------- PRIVACY POLICY AND TERMS ---------- */
+// Template text for a beta. Have a Nigerian lawyer review it before public launch.
+const LEGAL_DOCS = {
+  privacy: {title: "Privacy Policy", body: [
+    ["Who we are", `${LEGAL.company} ("we") runs the TREASURE messaging app. Questions about your data: ${LEGAL.email}.`],
+    ["What we collect", "Your email address, name, optional profile photo and about line; the messages, photos, voice notes and files you send; items you save in your Vault and Memories; and basic technical data needed to run the app."],
+    ["Why we use it", "To create your account, deliver your messages, keep your Vault and Memories, keep the service secure, and fix problems. We do not sell your data and we do not show ads."],
+    ["Treasure AI", "AI features are off by default. If AI features are added, they will only read your messages or Vault when you switch the matching setting on, and you can switch it off at any time."],
+    ["Encryption", "Data is encrypted while it travels between your phone and our servers. Messages are stored on our servers and are not yet end-to-end encrypted. We will not read your private messages unless needed to keep the service secure or required by law."],
+    ["Who else handles data", "We use hosting and database providers (currently Supabase and Netlify) to run TREASURE. They process data only to provide those services."],
+    ["Keeping and deleting data", "We keep your data while your account is open. In Me, choose Delete my account to remove your profile, messages, Vault and Memories. Backups may keep copies for up to 30 days."],
+    ["Your rights", "Under the Nigeria Data Protection Act 2023 you may ask to see, correct or delete your data, or object to how it is used. Contact us at the email above."],
+    ["Age", "TREASURE is for people aged 18 and over."],
+    ["Changes", `We may update this policy and will show the new date here. Last updated: ${LEGAL.updated}.`]
+  ]},
+  terms: {title: "Terms of Use", body: [
+    ["Using TREASURE", "By creating an account you agree to these terms. You must be 18 or older and give accurate details. You are responsible for your password and for what happens on your account."],
+    ["Beta service", "TREASURE is in beta. It is provided as is, may change or go offline, and may contain errors. Please keep copies of anything important."],
+    ["What you may not do", "Do not use TREASURE for anything illegal, to harass or threaten others, to send spam or scams, to share content that exploits children, to spread malware, or to try to break or misuse the service."],
+    ["Your content", "You own what you send and save. You allow us to store and deliver it so the app can work. You are responsible for having the right to share it."],
+    ["Suspending accounts", "We may suspend or remove accounts that break these terms or put others at risk."],
+    ["Limits of liability", "To the extent the law allows, we are not liable for lost data, lost profits or indirect losses from using TREASURE."],
+    ["Governing law", "These terms are governed by the laws of the Federal Republic of Nigeria."],
+    ["Contact", `${LEGAL.email}. Last updated: ${LEGAL.updated}.`]
+  ]}
+};
+function openLegal(kind) {
+  const doc = LEGAL_DOCS[kind]; if (!doc) return;
+  closeLegal();
+  const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.id = "legalbg"; bg.dataset.act = "legalbg";
+  bg.innerHTML = `<div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(doc.title)}">
+    <div class="row" style="border:0;padding:0;margin:0;background:none;box-shadow:none"><h1 class="g" style="margin:0;font-size:18px">${esc(doc.title)}</h1>
+    <button class="chip ic" data-act="legalclose" aria-label="Close">✕</button></div>
+    <div class="list legal">${doc.body.map(s => `<h2>${esc(s[0])}</h2><p>${esc(s[1])}</p>`).join("")}</div></div>`;
+  document.body.appendChild(bg);
+}
+function closeLegal() { const e = $("#legalbg"); if (e) e.remove(); }
+
 /* ---------- AUTH ---------- */
 function renderAuth(mode, msg, ok) {
   mode = mode || "in";
+  const forgot = mode === "forgot";
   root.innerHTML = `
   <div class="auth"><form class="box" id="authForm" novalidate>
     <h1>TREASURE</h1><p class="tag">DISCOVER. CONNECT. VALUE.</p>
     ${pendingAdd() ? `<p class="tag" style="opacity:1;letter-spacing:.04em;font-size:14px">A friend invited you to chat on TREASURE. Sign in or create an account to start.</p>` : ""}
+    ${forgot ? `<p class="tag" style="opacity:1;letter-spacing:.04em;font-size:14px">Enter your email and we will send you a link to choose a new password.</p>` : ""}
     ${mode === "up" ? `<input id="an" autocomplete="name" placeholder="Your name" aria-label="Your name">` : ""}
     <input id="ae" type="email" autocomplete="email" placeholder="Email" aria-label="Email">
-    <input id="ap" type="password" autocomplete="${mode === "up" ? "new-password" : "current-password"}" placeholder="Password (6+ characters)" aria-label="Password">
+    ${forgot ? "" : `<input id="ap" type="password" autocomplete="${mode === "up" ? "new-password" : "current-password"}" placeholder="Password (6+ characters)" aria-label="Password">`}
     <div class="err ${ok ? "ok" : ""}" id="aerr" role="alert">${esc(msg || "")}</div>
-    <button class="btn" id="abtn" type="submit">${mode === "up" ? "Create account" : "Sign in"}</button>
-    <button class="link" type="button" data-act="authmode" data-mode="${mode === "up" ? "in" : "up"}">${mode === "up" ? "I already have an account" : "New here? Create an account"}</button>
+    <button class="btn" id="abtn" type="submit">${mode === "up" ? "Create account" : forgot ? "Send reset link" : "Sign in"}</button>
+    ${mode === "in" ? `<button class="link" type="button" data-act="authmode" data-mode="forgot">Forgot password?</button>` : ""}
+    <button class="link" type="button" data-act="authmode" data-mode="${mode === "up" || forgot ? "in" : "up"}">${mode === "up" ? "I already have an account" : forgot ? "Back to sign in" : "New here? Create an account"}</button>
+    <p class="fine">By continuing you agree to our <button type="button" data-act="legal" data-k="terms">Terms</button> and <button type="button" data-act="legal" data-k="privacy">Privacy Policy</button>.</p>
   </form></div>`;
   $("#authForm").addEventListener("submit", ev => { ev.preventDefault(); doAuth(mode); });
 }
+function renderReset(msg) {
+  root.innerHTML = `
+  <div class="auth"><form class="box" id="resetForm" novalidate>
+    <h1>TREASURE</h1><p class="tag">CHOOSE A NEW PASSWORD</p>
+    <input id="np" type="password" autocomplete="new-password" placeholder="New password (6+ characters)" aria-label="New password">
+    <input id="np2" type="password" autocomplete="new-password" placeholder="Repeat new password" aria-label="Repeat new password">
+    <div class="err" id="aerr" role="alert">${esc(msg || "")}</div>
+    <button class="btn" id="abtn" type="submit">Save new password</button>
+  </form></div>`;
+  $("#resetForm").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const a = $("#np").value, b = $("#np2").value, err = t => { $("#aerr").textContent = t; $("#abtn").disabled = false; };
+    if (a.length < 6) return err("Use at least 6 characters.");
+    if (a !== b) return err("The two passwords do not match.");
+    $("#abtn").disabled = true;
+    const {data, error} = await sb.auth.updateUser({password: a});
+    if (error) return err(error.message);
+    history.replaceState(null, "", location.pathname + location.search);
+    await enter(data.user);
+    toast("Password updated");
+  });
+}
 async function doAuth(mode) {
-  const email = $("#ae").value.trim(), pw = $("#ap").value, name = mode === "up" ? $("#an").value.trim() : "";
+  const email = $("#ae").value.trim(), pw = mode === "forgot" ? "" : $("#ap").value, name = mode === "up" ? $("#an").value.trim() : "";
   const err = t => { $("#aerr").className = "err"; $("#aerr").textContent = t; $("#abtn").disabled = false; };
+  if (mode === "forgot") {
+    if (!email) return err("Enter your email.");
+    $("#abtn").disabled = true;
+    const {error} = await sb.auth.resetPasswordForEmail(email, {redirectTo: location.origin + location.pathname});
+    if (error) return err(error.message);
+    return renderAuth("in", "If that email has an account, a reset link is on its way. Check your inbox and spam folder.", true);
+  }
   if (!email || !pw) return err("Enter your email and password.");
   if (mode === "up" && !name) return err("Enter your name so friends can find you.");
   if (pw.length < 6) return err("Use at least 6 characters for the password.");
@@ -248,8 +334,8 @@ async function enter(user) {
     const {data} = await sb.from("profiles").update({display_name: wanted}).eq("id", user.id).select().single();
     if (data) S.me = data;
   }
-  S.names[user.id] = S.me.display_name;
-  S.tab = "chats"; S.open = null;
+  S.names[user.id] = S.me.display_name; S.avatars[user.id] = S.me.avatar_url || null;
+  S.tab = "chats"; S.open = null; S.q = ""; S.msgQ = null;
   startRealtime();
   render();
   await refreshConvs();
@@ -262,6 +348,7 @@ function startRealtime() {
   stopRealtime();
   S.channel = sb.channel("treasure-live")
     .on("postgres_changes", {event: "INSERT", schema: "public", table: "messages"}, p => onNewMessage(p.new))
+    .on("postgres_changes", {event: "UPDATE", schema: "public", table: "messages"}, p => onMsgUpdate(p.new))
     .on("postgres_changes", {event: "INSERT", schema: "public", table: "conversation_members"}, () => refreshConvsSoon())
     .subscribe();
 }
@@ -269,11 +356,71 @@ function stopRealtime() { if (S.channel) { sb.removeChannel(S.channel); S.channe
 let rcTimer;
 function refreshConvsSoon() { clearTimeout(rcTimer); rcTimer = setTimeout(refreshConvs, 250); }
 function onNewMessage(m) {
-  if (S.open && m.conversation_id === S.open.id) {
+  const here = S.open && m.conversation_id === S.open.id;
+  if (here) {
     addMsg(m);
-    if (m.sender_id !== S.user.id) markRead(m.conversation_id);
+    if (m.sender_id !== S.user.id && !document.hidden) markRead(m.conversation_id);
+  }
+  if (m.sender_id !== S.user.id && (!here || document.hidden)) alertIncoming();
+  refreshConvsSoon();
+}
+function onMsgUpdate(m) {
+  if (S.open && m.conversation_id === S.open.id) {
+    const i = S.msgs.findIndex(x => x.id === m.id);
+    if (i >= 0) { S.msgs[i] = m; paintMsgs(); }
   }
   refreshConvsSoon();
+}
+
+/* ---------- SOUND, VIBRATION AND UNREAD BADGE ---------- */
+const soundOn = () => { try { return localStorage.getItem("tr_sound") !== "off"; } catch (e) { return true; } };
+function alertIncoming() {
+  if (!soundOn()) return;
+  try { if (navigator.vibrate) navigator.vibrate(120); } catch (e) {}
+  try {
+    const ac = new (window.AudioContext || window.webkitAudioContext)(), o = ac.createOscillator(), g = ac.createGain();
+    o.type = "sine"; o.frequency.value = 880; g.gain.setValueAtTime(0.0001, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.15, ac.currentTime + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.25);
+    o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.27);
+    o.onended = () => ac.close();
+  } catch (e) { /* browsers may block sound until the first tap */ }
+}
+function updateBadge() {
+  const n = S.convs.reduce((a, c) => a + (c.unread || 0), 0);
+  document.title = n ? "(" + n + ") TREASURE" : "TREASURE";
+  try { if (navigator.setAppBadge) { n ? navigator.setAppBadge(n) : navigator.clearAppBadge(); } } catch (e) {}
+  const t = $("#chatsTab"); if (t) t.innerHTML = "Chats" + (n ? ` <span class="badge tabbadge">${n}</span>` : "");
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden && S.open && S.user) { markRead(S.open.id); refreshConvsSoon(); } });
+
+/* ---------- AVATARS ---------- */
+function avatarHtml(uid, name, cls) {
+  const u = uid && S.avatars[uid];
+  return `<div class="av ${cls || ""}" aria-hidden="true">${u ? `<img src="${esc(u)}" alt="">` : esc(initial(name))}</div>`;
+}
+function squarePhoto(file, size) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const s = Math.min(img.width, img.height), sx = (img.width - s) / 2, sy = (img.height - s) / 2;
+      const c = document.createElement("canvas"); c.width = c.height = size;
+      c.getContext("2d").drawImage(img, sx, sy, s, s, 0, 0, size, size);
+      res(c.toDataURL("image/jpeg", 0.8));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error("Could not read that image.")); };
+    img.src = url;
+  });
+}
+async function setAvatar(file) {
+  if (!file || !file.type.startsWith("image/")) return toast("Choose a photo.");
+  try {
+    const dataUrl = await squarePhoto(file, 160);
+    const {data, error} = await sb.from("profiles").update({avatar_url: dataUrl}).eq("id", S.user.id).select().single();
+    if (error) return toast(error.message);
+    S.me = data; S.avatars[S.user.id] = data.avatar_url; toast("Photo updated");
+    const main = $("#main"); if (main && S.tab === "me") { main.innerHTML = viewMe(); bindMe(); }
+  } catch (e) { toast(e.message || "Could not use that photo."); }
 }
 
 /* ---------- CONVERSATIONS ---------- */
@@ -285,13 +432,13 @@ async function refreshConvs() {
   const ids = mem.map(m => m.conversation_id);
   if (!ids.length) { S.convs = []; paintConvs(); return; }
   const [a, b, c] = await Promise.all([
-    sb.from("conversation_members").select("conversation_id,user_id,profiles(display_name)").in("conversation_id", ids),
+    sb.from("conversation_members").select("conversation_id,user_id,profiles(display_name,avatar_url)").in("conversation_id", ids),
     sb.from("messages").select("id,conversation_id,sender_id,body,media_type,created_at,deleted_at").in("conversation_id", ids).order("created_at", {ascending: false}).limit(300),
     sb.rpc("unread_counts")
   ]);
   const members = a.data || [], msgs = b.data || [], unread = {};
   (c.data || []).forEach(r => { unread[r.conversation_id] = Number(r.unread) || 0; });
-  members.forEach(r => { if (r.profiles) S.names[r.user_id] = r.profiles.display_name; });
+  members.forEach(r => { if (r.profiles) { S.names[r.user_id] = r.profiles.display_name; S.avatars[r.user_id] = r.profiles.avatar_url || null; } });
   const lastBy = {};
   msgs.forEach(m => { if (!lastBy[m.conversation_id]) lastBy[m.conversation_id] = m; });
   S.convs = mem.map(m => {
@@ -304,20 +451,23 @@ async function refreshConvs() {
       const who = last.sender_id === S.user.id ? "You: " : (cv.is_group ? (S.names[last.sender_id] || "Someone") + ": " : "");
       preview = last.deleted_at ? "Message deleted" : who + (last.body || mediaLabel(last.media_type));
     }
-    return {id: cv.id, is_group: cv.is_group, title, preview, time: last ? last.created_at : cv.created_at, unread: unread[cv.id] || 0};
+    return {id: cv.id, is_group: cv.is_group, title, uid: cv.is_group ? null : (others[0] && others[0].user_id), preview, time: last ? last.created_at : cv.created_at, unread: unread[cv.id] || 0};
   }).sort((x, y) => new Date(y.time) - new Date(x.time));
-  if (S.open) { const f = S.convs.find(x => x.id === S.open.id); if (f) S.open = f; }
-  paintConvs();
+  if (S.open) { const f = S.convs.find(x => x.id === S.open.id); if (f) { S.open = f; if (!document.hidden) f.unread = 0; } }
+  paintConvs(); updateBadge();
 }
 function paintConvs() {
   const el = $("#list"); if (!el || S.tab !== "chats" || S.open) return;
   if (!S.convs.length) {
-    el.innerHTML = `<div class="empty"><b>No chats yet</b>Tap + to start one. You need at least one other person signed up to chat with.</div>`;
+    el.innerHTML = `<div class="empty"><b>No chats yet</b>Tap + to start one, or share your invite link from the Me tab.</div>`;
     return;
   }
-  el.innerHTML = S.convs.map(c => `
+  const q = (S.q || "").trim().toLowerCase();
+  const list = q ? S.convs.filter(c => c.title.toLowerCase().includes(q) || c.preview.toLowerCase().includes(q)) : S.convs;
+  if (!list.length) { el.innerHTML = `<div class="empty"><b>No chats match</b>Try a different name or word.</div>`; return; }
+  el.innerHTML = list.map(c => `
     <button class="row" data-act="open" data-id="${esc(c.id)}">
-      <div class="av" aria-hidden="true">${esc(initial(c.title))}</div>
+      ${avatarHtml(c.uid, c.title)}
       <div class="g"><div class="b tr">${esc(c.title)}</div><div class="m tr">${esc(c.preview)}</div></div>
       <div class="side"><div class="m">${esc(fmt(c.time))}</div>${c.unread ? `<span class="badge">${c.unread}</span>` : ""}</div>
     </button>`).join("");
@@ -326,7 +476,7 @@ function paintConvs() {
 /* ---------- CHAT ---------- */
 async function openConv(id) {
   const c = S.convs.find(x => x.id === id); if (!c) return;
-  S.open = c; S.msgs = []; renderChat();
+  S.open = c; S.msgs = []; S.msgQ = null; renderChat();
   const {data, error} = await sb.from("messages").select("*").eq("conversation_id", id).order("created_at", {ascending: false}).limit(200);
   if (error) { toast(error.message); return; }
   S.msgs = (data || []).reverse(); paintMsgs();
@@ -337,7 +487,10 @@ function renderChat() {
   root.innerHTML = `
   <div class="app">
     <div class="top"><button class="chip ic" data-act="back" aria-label="Back to chats">← Back</button>
-      <h1 class="tr">${esc(c.title)}</h1></div>
+      ${avatarHtml(c.uid, c.title)}
+      <h1 class="tr">${esc(c.title)}</h1>
+      <button class="chip ic" data-act="msgsearch" aria-label="Search in this chat">Search</button></div>
+    <div class="chatbar" id="chatbar" hidden><input id="msq" type="search" placeholder="Search this chat" aria-label="Search this chat"><button class="chip ic" data-act="msgsearch">Close</button></div>
     <div class="msgs" id="msgs" aria-live="polite"></div>
     <form class="composer" id="cf" autocomplete="off">
       <label class="ib" aria-label="Attach a photo, video or file" title="Attach">
@@ -482,23 +635,44 @@ function paintMsgs() {
   const el = $("#msgs"); if (!el || !S.open) return;
   const near = el.scrollHeight - el.scrollTop - el.clientHeight < 140;
   let html = "", lastDay = "";
-  S.msgs.forEach(m => {
+  const sq = (S.msgQ || "").trim().toLowerCase();
+  const shown = sq ? S.msgs.filter(m => !m.deleted_at && (m.body || "").toLowerCase().includes(sq)) : S.msgs;
+  shown.forEach(m => {
     const d = new Date(m.created_at).toDateString();
     if (d !== lastDay) { html += `<div class="sep">${esc(dayLabel(m.created_at))}</div>`; lastDay = d; }
     const mine = m.sender_id === S.user.id;
     const text = m.deleted_at ? "Message deleted" : (m.body || "");
     const canSave = !m.deleted_at && m.body;
+    const canDelete = mine && !m.deleted_at;
     html += `<div class="bub ${mine ? "me" : ""}">
       ${!mine && S.open.is_group ? `<div class="who">${esc(S.names[m.sender_id] || "Someone")}</div>` : ""}
       ${mediaHtml(m)}
-      ${text ? `<div class="txt">${esc(text)}</div>` : ""}
+      ${text ? `<div class="txt" ${m.deleted_at ? 'style="font-style:italic;opacity:.7"' : ""}>${esc(text)}</div>` : ""}
       <div class="meta"><span>${esc(new Date(m.created_at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}))}</span>
-      ${canSave ? `<button type="button" data-act="savemsg" data-id="${esc(m.id)}">Save to Vault</button>` : ""}</div></div>`;
+      ${canSave ? `<button type="button" data-act="savemsg" data-id="${esc(m.id)}">Save to Vault</button>` : ""}
+      ${canDelete ? `<button type="button" data-act="delmsg" data-id="${esc(m.id)}">Delete</button>` : ""}</div></div>`;
   });
   S.stick = near || el.dataset.first !== "1";
-  el.innerHTML = html || `<div class="empty"><b>Say hello</b>Messages here are saved to your account and appear instantly for the other person.</div>`;
+  el.innerHTML = html || (sq
+    ? `<div class="empty"><b>No messages match</b>Try a different word.</div>`
+    : `<div class="empty"><b>Say hello</b>Messages here are saved to your account and appear instantly for the other person.</div>`);
   if (S.stick) { el.scrollTop = el.scrollHeight; el.dataset.first = "1"; }
   hydrateMedia();
+}
+async function deleteMsg(id) {
+  const m = S.msgs.find(x => x.id === id); if (!m || m.sender_id !== S.user.id) return;
+  if (!confirm("Delete this message for everyone?")) return;
+  if (m.media_path) { try { await sb.storage.from("chat-media").remove([m.media_path]); } catch (e) {} }
+  const {data, error} = await sb.from("messages").update({deleted_at: new Date().toISOString(), body: "", media_path: null, media_type: null}).eq("id", id).select().single();
+  if (error) return toast("Could not delete: " + error.message);
+  const i = S.msgs.findIndex(x => x.id === id); if (i >= 0) S.msgs[i] = data;
+  paintMsgs(); refreshConvsSoon();
+}
+function toggleMsgSearch() {
+  const bar = $("#chatbar"); if (!bar) return;
+  const open = bar.hidden;
+  bar.hidden = !open; S.msgQ = open ? "" : null;
+  if (open) { const i = $("#msq"); i.value = ""; i.focus(); } else paintMsgs();
 }
 async function markRead(id) {
   await sb.from("conversation_members").update({last_read_at: new Date().toISOString()}).eq("conversation_id", id).eq("user_id", S.user.id);
@@ -515,8 +689,9 @@ async function saveMsgToVault(id) {
 async function openSheet() {
   S.sheet = {mode: "dm", people: [], picked: new Set(), q: ""};
   paintSheet();
-  const {data, error} = await sb.from("profiles").select("id,display_name,about").neq("id", S.user.id).order("display_name").limit(300);
+  const {data, error} = await sb.from("profiles").select("id,display_name,about,avatar_url").neq("id", S.user.id).order("display_name").limit(300);
   if (error) { toast(error.message); return; }
+  (data || []).forEach(p => { if (p.avatar_url) S.avatars[p.id] = p.avatar_url; });
   S.sheet.people = data || []; paintSheetList();
 }
 function paintSheet() {
@@ -544,7 +719,7 @@ function paintSheetList() {
   el.innerHTML = list.map(p => {
     const picked = S.sheet.picked.has(p.id);
     return `<button class="row" data-act="${S.sheet.mode === "dm" ? "startdm" : "pick"}" data-id="${esc(p.id)}">
-      <div class="av" aria-hidden="true">${esc(initial(p.display_name))}</div>
+      ${avatarHtml(p.id, p.display_name)}
       <div class="g"><div class="b tr">${esc(p.display_name)}</div><div class="m tr">${esc(p.about || "")}</div></div>
       ${S.sheet.mode === "group" ? `<span class="chip ${picked ? "on" : ""}" style="margin:0">${picked ? "Added" : "Add"}</span>` : ""}</button>`;
   }).join("");
@@ -683,13 +858,19 @@ function viewMe() {
   const me = S.me;
   const tg = (k, label, sub) => `<div class="row"><div class="g"><div class="b">${label}</div><div class="m">${sub}</div></div>
     <button class="tg ${me[k] ? "on" : ""}" role="switch" aria-checked="${!!me[k]}" aria-label="${label}" data-act="tog" data-k="${k}"></button></div>`;
-  return `<form class="form" id="pf" autocomplete="off">
+  return `<div class="row" style="align-items:center">${avatarHtml(S.user.id, me.display_name, "lg")}
+      <div class="g"><div class="b">Profile photo</div><div class="m">Shown to people you chat with.</div></div>
+      <label class="chip" style="margin:0;cursor:pointer">Change<input id="avf" type="file" accept="image/*" hidden></label></div>
+    <form class="form" id="pf" autocomplete="off">
       <label class="f" for="pn" style="margin:0">Your name</label><input id="pn" value="${esc(me.display_name)}">
       <label class="f" for="pa" style="margin:4px 0 0">About</label><input id="pa" value="${esc(me.about || "")}">
       <button class="btn" type="submit">Save profile</button></form>
     <h2>Treasure AI</h2>
     ${tg("ai_can_read_messages", "Let AI read my messages", "Off by default. Saved now and used when Treasure AI launches.")}
     ${tg("ai_can_read_vault", "Let AI search my Vault", "Off by default. Saved now and used when Treasure AI launches.")}
+    <h2>Notifications</h2>
+    <div class="row"><div class="g"><div class="b">Message sounds</div><div class="m">Beep and vibrate when a message arrives while TREASURE is open.</div></div>
+    <button class="tg ${soundOn() ? "on" : ""}" role="switch" aria-checked="${soundOn()}" aria-label="Message sounds" data-act="sound"></button></div>
     <h2>Invite friends</h2>
     <div class="m" style="margin-bottom:8px">Send your link. When a friend opens it and signs up, a chat with you starts automatically.</div>
     <button class="btn" data-act="invite" style="margin-bottom:8px">Share my invite link</button>
@@ -697,9 +878,24 @@ function viewMe() {
     <button class="btn o" id="installBtn" data-act="install" ${S.installEv ? "" : "hidden"} style="margin-bottom:8px">Install TREASURE on this phone</button>
     <div class="m" style="margin-bottom:12px">To add it to your home screen: open the browser menu (⋮) and choose Add to Home screen.</div>
     <div class="m" style="margin-bottom:12px">Signed in as ${esc(S.user.email || "")}</div>
-    <button class="btn o" data-act="signout">Sign out</button>`;
+    <button class="btn o" data-act="signout">Sign out</button>
+    <p class="fine" style="margin-top:14px"><button type="button" data-act="legal" data-k="terms">Terms</button> · <button type="button" data-act="legal" data-k="privacy">Privacy Policy</button></p>
+    <button class="btn o danger" data-act="delacct" style="margin-top:8px">Delete my account</button>`;
+}
+async function deleteAccount() {
+  const t = prompt("This permanently deletes your account, messages, Vault and Memories. Type DELETE to confirm.");
+  if (t !== "DELETE") return;
+  try {
+    const {data: files} = await sb.storage.from("vault").list(S.user.id, {limit: 1000});
+    if (files && files.length) await sb.storage.from("vault").remove(files.map(f => S.user.id + "/" + f.name));
+  } catch (e) {}
+  const {error} = await sb.rpc("delete_my_account");
+  if (error) return toast("Could not delete: " + error.message + " (run the delete_my_account SQL first)");
+  await signOut();
+  toast("Your account was deleted.");
 }
 function bindMe() {
+  const af = $("#avf"); if (af) af.addEventListener("change", e => { const f = e.target.files[0]; if (f) setAvatar(f); });
   $("#pf").addEventListener("submit", async ev => {
     ev.preventDefault();
     const name = $("#pn").value.trim(); if (!name) return toast("Your name cannot be empty.");
@@ -721,12 +917,13 @@ function render() {
   if (!S.user) return renderAuth("in");
   if (S.open) return renderChat();
   const title = S.tab === "chats" ? `<span class="brand">TREASURE</span>` : esc((TABS.find(t => t[0] === S.tab) || [])[1] || "");
-  const view = {chats: `<div id="list"></div><button class="fab" data-act="newchat" aria-label="New chat">+</button>`, vault: viewVault(), memories: viewMems(), me: viewMe()}[S.tab];
+  const view = {chats: `<input class="search" id="cq" type="search" placeholder="Search chats" aria-label="Search chats" value="${esc(S.q)}"><div id="list"></div><button class="fab" data-act="newchat" aria-label="New chat">+</button>`, vault: viewVault(), memories: viewMems(), me: viewMe()}[S.tab];
   root.innerHTML = `<div class="app">
     <div class="top"><h1>${title}</h1></div>
     <div class="main" id="main">${view}</div>
-    <nav class="nav" aria-label="Main">${TABS.map(t => `<button class="${S.tab === t[0] ? "on" : ""}" data-act="tab" data-t="${t[0]}">${t[1]}</button>`).join("")}</nav>
+    <nav class="nav" aria-label="Main">${TABS.map(t => `<button class="${S.tab === t[0] ? "on" : ""}" data-act="tab" data-t="${t[0]}" ${t[0] === "chats" ? 'id="chatsTab"' : ""}>${t[1]}</button>`).join("")}</nav>
   </div>`;
+  updateBadge();
   if (S.tab === "chats") paintConvs();
   if (S.tab === "vault") { bindVault(); paintVault(); loadVault(); }
   if (S.tab === "memories") { bindMems(); paintMems(); loadMems(); }
@@ -742,7 +939,13 @@ document.addEventListener("click", async e => {
     case "authmode": return renderAuth(d.mode);
     case "tab": S.tab = d.t; return render();
     case "open": return openConv(d.id);
-    case "back": stopRec(true); S.open = null; render(); return refreshConvs();
+    case "back": stopRec(true); S.open = null; S.msgQ = null; render(); return refreshConvs();
+    case "legal": return openLegal(d.k);
+    case "legalclose": case "legalbg": if (d.act === "legalbg" && e.target !== el) return; return closeLegal();
+    case "delmsg": return deleteMsg(d.id);
+    case "msgsearch": return toggleMsgSearch();
+    case "sound": try { localStorage.setItem("tr_sound", soundOn() ? "off" : "on"); } catch (er) {} { const m = $("#main"); if (m) { m.innerHTML = viewMe(); bindMe(); } } return;
+    case "delacct": return deleteAccount();
     case "mic": return startRec();
     case "recsend": return stopRec(false);
     case "reccancel": return stopRec(true);
@@ -762,12 +965,18 @@ document.addEventListener("click", async e => {
     case "signout": return signOut();
   }
 });
-document.addEventListener("keydown", e => { if (e.key === "Escape" && S.sheet) closeSheet(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { if ($("#legalbg")) closeLegal(); else if (S.sheet) closeSheet(); } });
+document.addEventListener("input", e => {
+  if (e.target.id === "cq") { S.q = e.target.value; paintConvs(); }
+  else if (e.target.id === "msq") { S.msgQ = e.target.value; paintMsgs(); }
+});
 
 /* ---------- START ---------- */
 (async function boot() {
   try {
     const {data: {session}} = await sb.auth.getSession();
+    if (RECOVERY && session) { S.user = session.user; return renderReset(); }
+    if (RECOVERY) return renderAuth("in", "That reset link has expired. Tap Forgot password to get a new one.");
     if (session) await enter(session.user); else renderAuth(pendingAdd() ? "up" : "in");
   } catch (e) { renderAuth("in", "Could not reach TREASURE. Check your connection and reload."); }
 })();
